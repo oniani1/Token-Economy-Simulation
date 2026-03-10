@@ -66,19 +66,19 @@ PARAMS = {
 
     # Multiplier by tier — flatter curve for better Gini
     "tier_reward_multipliers": {
-        1: 1.0,    # 50 tokens/month
-        2: 1.2,    # 60 tokens/month
-        3: 1.5,    # 75 tokens/month
-        4: 2.0,    # 100 tokens/month
-        5: 2.5,    # 125 tokens/month
-        6: 3.0,    # 150 tokens/month
+        1: 1.0,
+        2: 1.0,
+        3: 1.0,
+        4: 1.0,
+        5: 1.0,
+        6: 1.0,
     },
 
 
     # ─── HARDWARE STAKING ───────────────────────────────────────────────
 
     # Minimum tokens that must be staked to unlock Tier 4+ (facility access)
-    "hardware_stake_requirement": 50,
+    "hardware_stake_requirement": 0,
 
 
     # ─── RETENTION MECHANICS ────────────────────────────────────────────
