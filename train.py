@@ -49,10 +49,10 @@ PARAMS = {
     # Base annual percentage yield for stakers
     # Higher APY → more operators stake → more churn reduction
     # stake_probability = min(0.3, staking_apy * 0.5)
-    "base_staking_apy": 0.60,   # 60% APY → 30% monthly stake probability (cap)
+    "base_staking_apy": 0.30,   # 30% APY → 15% monthly stake probability
 
     # Additional APY bonus per month of lockup commitment
-    "lockup_bonus_per_month": 0.005,  # +0.5% per month locked
+    "lockup_bonus_per_month": 0.000,  # No lockup bonus — equal staking rewards
 
     # Lockup period bounds (months)
     "min_lockup_months": 1,
@@ -84,13 +84,13 @@ PARAMS = {
     # ─── RETENTION MECHANICS ────────────────────────────────────────────
 
     # How much staking reduces base churn rate (0 = no effect, 1 = eliminates churn)
-    "staking_churn_reduction": 0.85,
+    "staking_churn_reduction": 0.99,
 
     # How much meaningful earnings reduce churn (0 = no effect, 1 = eliminates churn)
-    "earnings_churn_reduction": 0.80,
+    "earnings_churn_reduction": 0.99,
 
     # Soulbound NFT credential retention bonus (T3+ operators)
-    "nft_retention_bonus": 0.40,
+    "nft_retention_bonus": 0.50,
 }
 
 
