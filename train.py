@@ -24,14 +24,14 @@ PARAMS = {
     "initial_supply": 10_000_000,
 
     # Maximum supply cap (hard ceiling, emissions stop here)
-    "max_supply": 100_000_000,
+    "max_supply": 500_000_000,
 
     # Monthly token emission (new tokens minted for rewards)
     # This gets halved every `halving_interval_months`
-    "monthly_emission_rate": 500_000,
+    "monthly_emission_rate": 5_000_000,
 
     # Halving interval in months (Helium uses 24, Bitcoin uses ~48)
-    "halving_interval_months": 12,
+    "halving_interval_months": 100,
 
     # Initial token price assumption (USD)
     "initial_token_price": 0.10,
