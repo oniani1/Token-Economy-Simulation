@@ -49,7 +49,7 @@ PARAMS = {
     # Base annual percentage yield for stakers
     # Higher APY → more operators stake → more churn reduction
     # stake_probability = min(0.3, staking_apy * 0.5)
-    "base_staking_apy": 0.30,   # 30% APY → 15% monthly stake probability
+    "base_staking_apy": 0.01,   # Near-zero APY — staking irrelevant when earnings_churn=0.99
 
     # Additional APY bonus per month of lockup commitment
     "lockup_bonus_per_month": 0.000,  # No lockup bonus — equal staking rewards
