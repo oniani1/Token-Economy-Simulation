@@ -62,7 +62,7 @@ PARAMS = {
     # ─── OPERATOR REWARDS ───────────────────────────────────────────────
 
     # Base monthly token reward for a Tier 1 operator
-    "base_monthly_reward_tokens": 50,
+    "base_monthly_reward_tokens": 100,
 
     # Multiplier by tier — flatter curve for better Gini
     "tier_reward_multipliers": {
@@ -84,13 +84,13 @@ PARAMS = {
     # ─── RETENTION MECHANICS ────────────────────────────────────────────
 
     # How much staking reduces base churn rate (0 = no effect, 1 = eliminates churn)
-    "staking_churn_reduction": 0.80,
+    "staking_churn_reduction": 0.85,
 
     # How much meaningful earnings reduce churn (0 = no effect, 1 = eliminates churn)
-    "earnings_churn_reduction": 0.60,
+    "earnings_churn_reduction": 0.80,
 
     # Soulbound NFT credential retention bonus (T3+ operators)
-    "nft_retention_bonus": 0.30,
+    "nft_retention_bonus": 0.40,
 }
 
 
