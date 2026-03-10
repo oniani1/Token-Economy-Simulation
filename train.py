@@ -78,7 +78,7 @@ PARAMS = {
     # ─── HARDWARE STAKING ───────────────────────────────────────────────
 
     # Minimum tokens that must be staked to unlock Tier 4+ (facility access)
-    "hardware_stake_requirement": 200,
+    "hardware_stake_requirement": 50,
 
 
     # ─── RETENTION MECHANICS ────────────────────────────────────────────
