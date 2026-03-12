@@ -1,136 +1,127 @@
 """
-CrowdTrain Token Economy Parameters
-====================================
+CrowdTrain Token Economy Parameters (v12 Memo)
+================================================
 THIS IS THE FILE THE AGENT MODIFIES.
 
 Everything here is fair game: token supply, emission schedules, staking mechanics,
-reward structures, burn rates, lockup terms, hardware staking requirements, etc.
+reward structures, burn rates, lockup terms, hardware staking, slashing, etc.
 
 The agent runs this file, which imports prepare.py's simulation engine,
 executes a Monte Carlo simulation, and prints the composite score.
-The score is what gets optimized — higher is better.
 
-Current best score: 0.4422 (baseline)
+Best score: 0.9494 (experiment 6: 20M emit, flat rewards, max retention)
+Baseline:   0.7217 (hardware_stake=5000, tiered multipliers, default retention)
 """
 
 import sys
 import time
 from prepare import run_monte_carlo, print_results
 
-# ─── TOKEN SUPPLY & EMISSIONS ──────────────────────────────────────────────
+# ─── TOKEN SUPPLY & EMISSIONS ────────────────────────────────────────────────
 
 PARAMS = {
-    # Initial circulating supply at launch
+    # Initial circulating supply at TGE (Solana token launch)
     "initial_supply": 10_000_000,
 
-    # Maximum supply cap (hard ceiling, emissions stop here)
+    # Maximum supply cap (hard ceiling)
     "max_supply": 500_000_000,
 
-    # Monthly token emission (new tokens minted for rewards)
-    # This gets halved every `halving_interval_months`
-    "monthly_emission_rate": 5_000_000,
+    # Monthly token emission — high steady emissions smooth price volatility
+    "monthly_emission_rate": 20_000_000,
 
-    # Halving interval in months (Helium uses 24, Bitcoin uses ~48)
+    # No halving during sim horizon (100 months > 24 month sim)
     "halving_interval_months": 100,
 
     # Initial token price assumption (USD)
-    "initial_token_price": 0.10,
+    "initial_token_price": 0.05,
 
 
-    # ─── BURN MECHANICS ─────────────────────────────────────────────────
-
-    # What percentage of fiat revenue gets converted to token burns
-    # Higher = more deflationary pressure, but less cash retained
-    "burn_pct_of_revenue": 0.30,
+    # ─── BURN MECHANICS ───────────────────────────────────────────────────
+    # 35% of enterprise fiat revenue → market-buy and permanently burn tokens
+    "burn_pct_of_revenue": 0.35,
 
 
-    # ─── STAKING MECHANICS ──────────────────────────────────────────────
-
-    # Base annual percentage yield for stakers
-    # Higher APY → more operators stake → more churn reduction
-    # stake_probability = min(0.3, staking_apy * 0.5)
-    "base_staking_apy": 0.01,   # Near-zero APY — staking irrelevant when earnings_churn=0.99
-
-    # Additional APY bonus per month of lockup commitment
-    "lockup_bonus_per_month": 0.000,  # No lockup bonus — equal staking rewards
-
-    # Lockup period bounds (months)
-    "min_lockup_months": 1,
-    "max_lockup_months": 12,
+    # ─── STAKING MECHANICS ────────────────────────────────────────────────
+    # Near-zero APY — voluntary staking is irrelevant when earnings churn = 0.90
+    "base_staking_apy": 0.01,
+    "lockup_bonus_per_month": 0.000,
+    "min_lockup_months": 3,
+    "max_lockup_months": 24,
 
 
-    # ─── OPERATOR REWARDS ───────────────────────────────────────────────
-
-    # Base monthly token reward for a Tier 1 operator
-    "base_monthly_reward_tokens": 100,
-
-    # Multiplier by tier — flatter curve for better Gini
+    # ─── OPERATOR REWARDS (7 TIERS) ──────────────────────────────────────
+    # Flat rewards across all tiers for maximum earnings fairness (low Gini)
+    "base_monthly_reward_tokens": 80,
     "tier_reward_multipliers": {
-        1: 1.0,
-        2: 1.0,
-        3: 1.0,
-        4: 1.0,
-        5: 1.0,
-        6: 1.0,
+        0: 1.0,    # Simulation Training
+        1: 1.0,    # Data Labeling
+        2: 1.0,    # Browser Teleop
+        3: 1.0,    # In-the-Wild Capture
+        4: 1.0,    # Facility Teleop
+        5: 1.0,    # Live Deployment
+        6: 1.0,    # Partner Missions
     },
 
 
-    # ─── HARDWARE STAKING ───────────────────────────────────────────────
+    # ─── HARDWARE STAKING ─────────────────────────────────────────────────
+    # 200 tokens deposit for VR headset/wearable
+    # Achievable in ~3-4 months of flat 80 token/month rewards after selling
+    "hardware_stake_tokens": 200,
 
-    # Minimum tokens that must be staked to unlock Tier 4+ (facility access)
-    "hardware_stake_requirement": 0,
+
+    # ─── SLASHING ─────────────────────────────────────────────────────────
+    "slash_pct": 0.05,
+    "quality_threshold": 0.5,
 
 
-    # ─── RETENTION MECHANICS ────────────────────────────────────────────
+    # ─── RETENTION MECHANICS ──────────────────────────────────────────────
+    # High staking + earnings churn reduction = strong retention moat
+    "staking_churn_reduction": 0.90,
+    "earnings_churn_reduction": 0.90,
 
-    # How much staking reduces base churn rate (0 = no effect, 1 = eliminates churn)
-    "staking_churn_reduction": 0.99,
+    # Soulbound NFT credential retention (T2+ operators)
+    "nft_retention_bonus": 0.40,
 
-    # How much meaningful earnings reduce churn (0 = no effect, 1 = eliminates churn)
-    "earnings_churn_reduction": 0.99,
-
-    # Soulbound NFT credential retention bonus (T3+ operators)
-    "nft_retention_bonus": 0.50,
+    # DeFi Land-style gamification for T0-T1 bottom-of-funnel retention
+    "gamification_churn_reduction": 0.30,
 }
 
 
-# ─── RUN SIMULATION ────────────────────────────────────────────────────────
+# ─── RUN SIMULATION ──────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     start = time.time()
 
-    print("Running CrowdTrain token economy simulation...")
+    print("Running CrowdTrain token economy simulation (v12 Memo)...")
     print(f"Parameters: {len(PARAMS)} configurable values")
     print()
 
-    # Debug: single run to see monthly prices
+    # Debug: single run to see monthly progression
     from prepare import run_simulation, evaluate
     history = run_simulation(PARAMS, seed=42)
-    print("Monthly prices (seed=42):")
+    print("Monthly progression (seed=42):")
     for h in history:
         m = h["month"]
         p = h["token_price"]
         r = h["monthly_revenue"]
         t4 = h["operators_t4_plus"]
         act = h["active_operators"]
-        print(f"  Month {m:2d}: price=${p:.4f}  revenue=${r:,.0f}  T4+={t4}  active={act}")
+        td = h["tier_distribution"]
+        sr = h["slash_rate"]
+        print(f"  Month {m:2d}: price=${p:.4f}  revenue=${r:,.0f}  T4+={t4}  active={act}  tiers={td}  slash={sr:.2%}")
     result = evaluate(history)
     print(f"\nSingle-run score: {result['score']}")
-    print(f"Stability: {result['stability_score']}")
-    print(f"Retention: {result['retention_score']} ({result['retention_pct']}%)")
-    prices_last12 = [h["token_price"] for h in history[-12:]]
-    mean_p = sum(prices_last12) / len(prices_last12)
-    var_p = sum((p - mean_p)**2 for p in prices_last12) / len(prices_last12)
-    cv = var_p**0.5 / max(0.001, mean_p)
-    print(f"CV (last 12mo): {cv:.4f}")
+    print(f"  Retention: {result['retention_score']} ({result['retention_pct']}%)")
+    print(f"  Stability: {result['stability_score']}")
+    print(f"  Revenue:   {result['revenue_score']}")
+    print(f"  Fairness:  {result['gini_score']}")
+    print(f"  Qualified: {result['qualified_score']}")
+    print(f"  Quality:   {result['quality_score']}")
     print()
 
     metrics = run_monte_carlo(PARAMS)
-
     elapsed = time.time() - start
 
     print_results(PARAMS, metrics)
     print(f"\nCompleted in {elapsed:.1f}s")
-
-    # Output the key metric for autoresearch tracking
     print(f"\nscore: {metrics['score_mean']:.6f}")
