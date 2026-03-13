@@ -35,22 +35,21 @@ from typing import List, Dict, Optional
 
 SIMULATION_MONTHS = 24          # 2-year simulation horizon
 RANDOM_SEED = 42                # Reproducibility
-NUM_MONTE_CARLO_RUNS = 20       # Statistical significance
-TARGET_OPERATORS_12MO = 5_000   # Pre-seed target with DeFi Land community pipeline
+NUM_MONTE_CARLO_RUNS = 50       # Statistical significance (higher for 50% vol)
+TARGET_OPERATORS_12MO = 50_000  # Pre-seed target with DeFi Land community pipeline
 
 
 def monthly_onboarding_schedule(month: int) -> int:
     """
-    Community-seeded S-curve onboarding. Conservative pre-seed ramp.
+    Community-seeded S-curve onboarding. Aggressive ramp.
     DeFi Land's 100K community + Solana/DePIN communities = recruitment pipeline.
-    Memo targets: 100 operators Q2, 500+ Q3, scaling with node expansion.
-    ~5,100 cumulative by month 12, ~8,500 by month 24.
+    ~50,000 cumulative by month 12, ~85,000 by month 24.
     """
     if month <= 12:
-        schedule = [30, 50, 100, 180, 300, 500, 650, 750, 800, 700, 550, 490]
+        schedule = [300, 500, 1000, 1800, 3000, 5000, 6500, 7500, 8000, 7000, 5500, 4900]
         return schedule[month - 1]
     else:
-        base = 450
+        base = 4500
         factor = (1.02 * 0.95) ** (month - 12)
         return int(base * factor)
 
@@ -73,8 +72,8 @@ TIERS = {
 # Base monthly churn rates by tier (before token incentive modifiers)
 # T0-T1 benefit from gamification (DeFi Land-style engagement design)
 BASE_CHURN_BY_TIER = {
-    0: 0.20,   # Sim-only — gamification helps but still app-like churn
-    1: 0.14,   # Labeling — annotation platform benchmark + gamification
+    0: 0.25,   # Sim-only — app-like churn, earning apps Day-30 retention 15-25%
+    1: 0.18,   # Labeling — Appen/Toloka annotator turnover benchmarks
     2: 0.10,   # Browser teleop — earning tokens, some commitment
     3: 0.08,   # In-the-wild capture — gear invested, community ties
     4: 0.04,   # Facility teleop — hardware-staked, high commitment
@@ -86,9 +85,9 @@ BASE_CHURN_BY_TIER = {
 # Higher than generic platforms due to MuJoCo+Unity gamified training
 BASE_PROGRESSION_RATE = {
     0: 0.55,   # Sim designed as fast-track (MuJoCo + Unity gamification)
-    1: 0.40,   # Labeling with leaderboards/streaks/squads
-    2: 0.30,   # Browser teleop
-    3: 0.20,   # In-the-wild capture
+    1: 0.25,   # Labeling→teleop is a major skill jump (drone pilot conversion rates)
+    2: 0.20,   # Browser teleop→field requires gear + different skillset
+    3: 0.12,   # In-the-wild→facility: hardware-stake gate, Helium upgrade ~10-15%
     4: 0.12,   # Facility teleop — quality bar is high
     5: 0.07,   # Live deployment — elite selection
     6: 0.00,   # Top tier
@@ -134,29 +133,29 @@ def monthly_fiat_revenue(month: int, num_active_t4_plus: int, total_active: int)
         return 0.0  # Pre-revenue + free design partner phase
 
     # Customer acquisition: S-curve
-    # 3 customers by month 9, 6 by month 12, 12 by month 24
-    max_customers = 12
-    midpoint = 12
-    steepness = 0.35
+    # 5 customers by month 9, 15 by month 12, 50 by month 24
+    max_customers = 50
+    midpoint = 14
+    steepness = 0.30
     demand = max_customers / (1 + math.exp(-steepness * (month - midpoint)))
 
     # Supply constraint: need operator pool to service customers
-    # Each customer needs ~200 operators across tiers (labeling + teleop)
-    operator_capacity = total_active / 200
+    # Each customer needs ~100 operators on average (mix of labeling + teleop contracts)
+    operator_capacity = total_active / 100
     actual_customers = min(demand, operator_capacity)
 
     if actual_customers < 0.5:
         return 0.0
 
-    # Base contract: $15K/month (3-6x cheaper than in-house at $48/hr)
-    base_contract = 15_000
+    # Base contract: $30K/month (3-6x cheaper than in-house, Scale AI benchmark)
+    base_contract = 30_000
 
     # T4+ operators unlock premium teleop contracts
     if num_active_t4_plus >= 10:
         premium = min(10_000, num_active_t4_plus * 100)
         base_contract += premium
 
-    noise = random.gauss(1.0, 0.12)  # 12% monthly variance
+    noise = random.gauss(1.0, 0.18)  # 18% monthly variance (early enterprise sales)
     return actual_customers * base_contract * max(0.5, noise)
 
 
@@ -183,7 +182,7 @@ def token_price_model(
     revenue_demand = monthly_revenue * 0.3  # Burn loop demand
     fundamental = (revenue_demand + 1000) / (liquid_supply / 1_000_000)
     price = prev_price * 0.7 + fundamental * 0.3
-    noise = random.gauss(1.0, 0.08)  # 8% monthly vol
+    noise = random.gauss(1.0, 0.50)  # 50% monthly vol
     price *= max(0.3, noise)
     return max(0.001, price)
 
@@ -228,9 +227,9 @@ def evaluate(history: List[Dict]) -> Dict[str, float]:
     if final_price < peak_price * 0.2:
         stability_score *= 0.3  # Heavy penalty for death spiral
 
-    # 3. Protocol revenue — target: $2M cumulative by month 24
+    # 3. Protocol revenue — target: $15M cumulative by month 24
     cumulative_revenue = sum(h.get("monthly_revenue", 0) for h in history)
-    revenue_score = min(1.0, cumulative_revenue / 2_000_000)
+    revenue_score = min(1.0, cumulative_revenue / 15_000_000)
 
     # 4. Operator earnings fairness (Gini)
     gini = final.get("earnings_gini", 0.5)
@@ -238,7 +237,7 @@ def evaluate(history: List[Dict]) -> Dict[str, float]:
 
     # 5. Qualified operator production (T4+ by month 24)
     t4_plus = final.get("operators_t4_plus", 0)
-    qualified_score = min(1.0, t4_plus / 300)
+    qualified_score = min(1.0, t4_plus / 3_000)
 
     # 6. Data quality — low slash rate = staking/slashing working well
     slash_rate = final.get("slash_rate", 0.0)
@@ -437,7 +436,7 @@ def run_simulation(params: Dict, seed: int = RANDOM_SEED) -> List[Dict]:
         sell_pressure = 0.0
         for op in active_ops:
             if op.tokens_held > 10:
-                pct = random.uniform(0.10, 0.30)
+                pct = random.uniform(0.25, 0.55)  # Emerging market operators sell aggressively
                 amt = op.tokens_held * pct
                 op.tokens_held -= amt
                 sell_pressure += amt
@@ -469,7 +468,7 @@ def run_simulation(params: Dict, seed: int = RANDOM_SEED) -> List[Dict]:
 
             # Meaningful earnings reduce churn
             monthly_earn = op.cumulative_earnings / max(1, op.months_active)
-            if monthly_earn > 50:
+            if monthly_earn > 150:  # Meaningful income threshold for emerging markets
                 base_churn *= (1 - earnings_churn_red)
 
             # Soulbound credential retention bonus (T2+)

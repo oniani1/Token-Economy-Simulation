@@ -9,8 +9,9 @@ reward structures, burn rates, lockup terms, hardware staking, slashing, etc.
 The agent runs this file, which imports prepare.py's simulation engine,
 executes a Monte Carlo simulation, and prints the composite score.
 
-Best score: 0.9494 (experiment 6: 20M emit, flat rewards, max retention)
-Baseline:   0.7217 (hardware_stake=5000, tiered multipliers, default retention)
+Best score (v1): 0.9494 (old prepare.py, 5K operators, 8% vol)
+Best score (v2): 0.8876 (updated prepare.py, 50K operators, 50% vol)
+Baseline (v2):   0.6823 (before train.py optimization)
 """
 
 import sys
@@ -30,15 +31,15 @@ PARAMS = {
     "monthly_emission_rate": 20_000_000,
 
     # No halving during sim horizon (100 months > 24 month sim)
-    "halving_interval_months": 100,
+    "halving_interval_months": 12,
 
     # Initial token price assumption (USD)
-    "initial_token_price": 0.05,
+    "initial_token_price": 1.00,
 
 
     # ─── BURN MECHANICS ───────────────────────────────────────────────────
     # 35% of enterprise fiat revenue → market-buy and permanently burn tokens
-    "burn_pct_of_revenue": 0.35,
+    "burn_pct_of_revenue": 0.60,
 
 
     # ─── STAKING MECHANICS ────────────────────────────────────────────────
@@ -50,8 +51,8 @@ PARAMS = {
 
 
     # ─── OPERATOR REWARDS (7 TIERS) ──────────────────────────────────────
-    # Flat rewards across all tiers for maximum earnings fairness (low Gini)
-    "base_monthly_reward_tokens": 80,
+    # Higher base rewards — operators need buffer to cover sell pressure + hardware deposit
+    "base_monthly_reward_tokens": 120,
     "tier_reward_multipliers": {
         0: 1.0,    # Simulation Training
         1: 1.0,    # Data Labeling
@@ -64,9 +65,9 @@ PARAMS = {
 
 
     # ─── HARDWARE STAKING ─────────────────────────────────────────────────
-    # 200 tokens deposit for VR headset/wearable
-    # Achievable in ~3-4 months of flat 80 token/month rewards after selling
-    "hardware_stake_tokens": 200,
+    # 30 tokens deposit for VR headset/wearable
+    # Low barrier — operators accumulate this in 1 month even with 55% sell pressure
+    "hardware_stake_tokens": 30,
 
 
     # ─── SLASHING ─────────────────────────────────────────────────────────
