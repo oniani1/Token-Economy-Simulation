@@ -1,0 +1,175 @@
+{
+  "supply": {
+    "initial_supply": 10000000,
+    "max_supply": 500000000,
+    "monthly_emission_rate": 3000000,
+    "halving_interval_months": 18,
+    "initial_token_price": 1.0,
+    "tge_distribution": {
+      "team_pct": 0.15,
+      "investor_pct": 0.15,
+      "treasury_pct": 0.25,
+      "initial_liquidity_pct": 0.05,
+      "operator_emissions_pct": 0.4
+    },
+    "team_vest_months": 48,
+    "investor_vest_months": 48
+  },
+  "task_model": {
+    "tier_hours_per_month": {
+      "0": 20,
+      "1": 80,
+      "2": 120,
+      "3": 80,
+      "4": 120,
+      "5": 80,
+      "6": 40
+    },
+    "tier_hourly_rate_usd": {
+      "0": 0.0,
+      "1": 5.0,
+      "2": 8.0,
+      "3": 12.0,
+      "4": 18.0,
+      "5": 28.0,
+      "6": 45.0
+    },
+    "operator_total_hour_budget": 160,
+    "review_minutes_per_task": 15,
+    "tier_is_sync": {
+      "0": false,
+      "1": false,
+      "2": true,
+      "3": false,
+      "4": true,
+      "5": true,
+      "6": false
+    },
+    "base_emission_per_active_op_per_month": 45.0,
+    "emission_tier_multiplier": {
+      "0": 0.5,
+      "1": 1.0,
+      "2": 1.2,
+      "3": 1.5,
+      "4": 2.0,
+      "5": 2.5,
+      "6": 3.0
+    }
+  },
+  "demand": {
+    "per_customer_hours_per_tier": {
+      "0": 0,
+      "1": 500,
+      "2": 300,
+      "3": 200,
+      "4": 200,
+      "5": 100,
+      "6": 30
+    },
+    "max_customers_at_24mo": 60,
+    "customer_curve_steepness": 0.4,
+    "customer_curve_midpoint_month": 13,
+    "customer_growth_post_24mo": 5.0,
+    "customer_cap": 200,
+    "demand_volatility_std": 0.1
+  },
+  "validation": {
+    "sample_rate_by_tier": {
+      "0": 0.1,
+      "1": 0.1,
+      "2": 0.25,
+      "3": 0.25,
+      "4": 1.0,
+      "5": 1.0,
+      "6": 1.0
+    },
+    "validators_per_task": 3,
+    "consensus_threshold": 2,
+    "min_validator_tier_offset": 1,
+    "validator_base_fee_pct": 0.1,
+    "audit_escalation_tier": 6,
+    "bootstrap_months": 3,
+    "catch_bonus_split_within_group": {
+      "fail_voters": 0.7,
+      "pass_voters": 0.3
+    }
+  },
+  "slashing": {
+    "strike_severities": [
+      0.1,
+      0.25,
+      0.5
+    ],
+    "ban_on_strike": 4,
+    "cooldown_months_after_3rd": 1,
+    "clean_hours_per_strike_reset": 100,
+    "slash_split": {
+      "validators": 0.5,
+      "burn": 0.5
+    },
+    "false_positive_penalty_pct": 0.05
+  },
+  "hardware": {
+    "stake_required_t3_usd": 100,
+    "stake_required_t4_usd": 150,
+    "stake_required_t6_usd": 800,
+    "hours_to_full_unlock": 100,
+    "quality_threshold_for_unlock": 0.65,
+    "stack_stakes_independently": true
+  },
+  "earnings": {
+    "phase_curve": "revenue_gated",
+    "phase_revenue_ladder_arr_to_fiat_ratio": [
+      [
+        0,
+        0.0
+      ],
+      [
+        1000000,
+        0.3
+      ],
+      [
+        5000000,
+        0.5
+      ],
+      [
+        20000000,
+        0.7
+      ]
+    ],
+    "phase_exempt_tiers": [
+      0,
+      1,
+      2
+    ],
+    "fiat_split_to_treasury": 0.3,
+    "fiat_split_to_operators": 0.7
+  },
+  "burn": {
+    "burn_pct_of_revenue": 0.6
+  },
+  "sell_pressure": {
+    "base_sell_pct_low": 0.25,
+    "base_sell_pct_high": 0.55,
+    "quality_decay_strength": 0.6,
+    "fiat_holding_decay_strength": 0.4
+  },
+  "nodes": {
+    "arms_per_node": 4,
+    "capex_per_node_usd": 50000,
+    "ops_per_node_target": 1000,
+    "partner_revenue_share": 0.15,
+    "node_utilization_alarm": 0.8,
+    "node_amortization_months": 36,
+    "max_concurrent_operators_per_arm": 2
+  },
+  "retention": {
+    "staking_churn_reduction": 0.9,
+    "earnings_churn_reduction": 0.9,
+    "nft_retention_bonus": 0.4,
+    "gamification_churn_reduction": 0.3
+  },
+  "study_assumption": {
+    "sim_trained_quality_bonus": 0.2
+  }
+}
