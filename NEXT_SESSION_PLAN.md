@@ -44,7 +44,7 @@ Hypothesis: B is the cleanest fix; A is a sledgehammer; C is realistic but more 
 ### Priority 2: Consolidate the v4 baseline config
 
 After fixing early-cohort mortality, lock in the baseline:
-- Rerun the 9-cell pillar ablation + stress sweep with corrected grace
+- Rerun the 8-cell pillar ablation + stress sweep with corrected grace
 - Pick the headline config (likely v4_no_personas with corrected grace)
 
 ### Priority 3: Finish iter3 60mo sweep
@@ -85,7 +85,7 @@ Replace grid sweeps with Gaussian Process optimization in continuous parameter s
 # Smoke test v4 (single seed, ~2 min)
 python train_v4.py
 
-# Full 9-cell ablation + stress sweep (~50 min @ MC=3)
+# Full 8-cell ablation + stress sweep (~50 min @ MC=3)
 python experiments_v4.py 3
 
 # Tuned-persona iteration (~30 min @ MC=2)

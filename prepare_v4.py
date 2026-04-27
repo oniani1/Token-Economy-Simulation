@@ -17,7 +17,7 @@ For ablations:
   v4_no_customers  = remove params['customers']
   v4_no_macro      = remove params['macro']
 
-DO NOT MODIFY (engine). Edit train.py for parameter experiments.
+DO NOT MODIFY (engine). Edit train_v4.py for parameter experiments.
 """
 
 import json
