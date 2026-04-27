@@ -3,3 +3,20 @@ __pycache__/
 results.tsv
 run.log
 SESSION.md
+
+# Experiment dumps and logs (regeneratable; winner_config.json is committed)
+v4_baseline_*.csv
+v4_baseline_*.json
+v4_best_*.csv
+v4_best_*.json
+v4_customers_final.csv
+v4_experiment_*.json
+v4_experiment_*.txt
+v4_iter2_*.json
+v4_iter2_*.txt
+v4_iter3_*.json
+v4_iter3_*.txt
+v4_remaining_*.txt
+ablation_results.json
+sweep_small_results.csv
+winner_timeseries.csv
