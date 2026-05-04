@@ -1,27 +1,28 @@
-# CrowdTrain Token Economy — Autoresearch Program
+# CrowdBrain Token Economy — Autoresearch Program
 
-You are an autonomous researcher optimizing the token economy for **CrowdTrain**, a Solana-native decentralized robotics workforce platform. Your goal is to find token economic parameters that produce a healthy, sustainable economy across two simulation generations:
+You are an autonomous researcher optimizing the token economy for **CrowdBrain** (rebranded from CrowdTrain in memo v5), a Solana-native DePIN robotics-operator network. Your goal is to find token economic parameters that produce a healthy, sustainable economy across three simulation generations:
 
 - **v3** — multi-witness peer validation, 36-month horizon, ~120K cumulative operators, 9-sub-score composite
 - **v4** — v3 plus three behavioral pillars (operator personas, first-class enterprise customers, macro economy with sentiment + AMM); 36/60-month horizons, 4 supplemental metrics
+- **v5** — v4 (no_personas) plus four memo-v5 layers: conditional tier unlock, bonded node-providers, 3-region geography, points→token transition; 36-month horizon; 24-cell sweep across 4 tracks; parallelized MC
 
 Read `README.md` first for the full project context. This file is the experiment-loop playbook.
 
 ## Context
 
-CrowdTrain manufactures qualified robotics operators at scale through a tiered sim-based training pipeline. Operators progress through seven tiers:
+CrowdBrain manufactures qualified robotics operators at scale through a tiered sim-based training pipeline. Internal indexing keeps v3/v4's 7-tier model (apples-to-apples comparability); v5 memo collapses to 6 tiers (T0–T5):
 
-| Tier | Name | Min Months | Skill Required |
-|------|------|-----------|----------------|
-| T0 | Simulation Training | 0 | 0.00 |
-| T1 | Data Labeling | 1 | 0.10 |
-| T2 | Browser Teleop | 2 | 0.20 |
-| T3 | In-the-Wild Capture | 3 | 0.35 |
-| T4 | Facility Teleop | 5 | 0.55 |
-| T5 | Live Deployment | 8 | 0.75 |
-| T6 | Partner Missions | 12 | 0.90 |
+| Internal | Memo v5 | Name | Min Months | Skill Required |
+|---|---|---|---|---|
+| T0 | T0 | Sim Academy | 0 | 0.00 |
+| T1 | T1 | Episode QA | 1 | 0.10 |
+| T2 | T2 | Browser Teleop | 2 | 0.20 |
+| T3 | T3 | VR/Wearable Teleop | 3 | 0.35 |
+| T4 | T4 | Failure Analysis | 5 | 0.55 |
+| T5 | T5 | Live Deployment | 8 | 0.75 |
+| T6 | T5 (collapsed) | Partner Missions | 12 | 0.90 |
 
-T4+ requires a USD-denominated hardware stake. Soulbound NFT credentials issue at T2+. The token economy needs to:
+T4+ requires a USD-denominated hardware stake. Soulbound NFT credentials issue at T2+. **In v5, T3/T4/T6 are conditionally gated** — they unlock only when revenue / op-count / time / demand thresholds are met. The token economy needs to:
 
 1. **Retain operators** long enough for them to reach T4+ and become qualified
 2. **Maintain token price stability** — no death spirals
@@ -30,8 +31,11 @@ T4+ requires a USD-denominated hardware stake. Soulbound NFT credentials issue a
 5. **Produce enough qualified operators** (T4+) to service customer demand
 6. **Survive macro shocks** (sentiment cycles, regulatory events, recessions, competitor launches) — v4 only
 7. **Manage customer concentration** (top-3 < 50% of revenue) — v4 only
+8. **Choose the right tier-unlock policy** so that T3/T4/T5 open with appropriate scale — v5 only
+9. **Maintain bonded node-provider quality** so the 50/50 facility/community split actually works — v5 only
+10. **Time the points→token transition** correctly (token economy is load-bearing for T3+) — v5 only
 
-The simulation models real behavioral data: gig-economy churn (Celayix 2023), DePIN staking patterns (Helium), robotics-data pricing (Scale AI / Vendr), enterprise SaaS NRR benchmarks.
+The simulation models real behavioral data: gig-economy churn (Celayix 2023), DePIN staking patterns (Helium), robotics-data pricing (Scale AI / Vendr), enterprise SaaS NRR benchmarks. v5 adds memo-cited concrete numbers: Tesla teleoperator wage $48/hr, CrowdBrain $5–12/hr (Georgia/Philippines/Kenya), VR hardware $300–500.
 
 ## Setup
 
@@ -39,10 +43,12 @@ The simulation models real behavioral data: gig-economy churn (Celayix 2023), De
 2. **Read the engine you'll be evaluating against** — pick one:
    - For **v3 work**: `prepare.py` (immutable engine), `train.py` (params you modify), `validation.py`, `nodes.py`, `treasury.py`
    - For **v4 work**: `prepare_v4.py` (immutable engine — wraps v3 with 3-pillar fallback), `train_v4.py` (params you modify), plus the v4 modules: `operators_v4.py`, `customers.py`, `macro.py`
+   - For **v5 work**: `prepare_v5.py` (immutable engine — wraps v4 with 4 layer hooks), `train_v5.py` (params you modify), plus the v5 modules: `tier_unlock.py`, `node_providers.py`, `geography.py`, `points_to_token.py`. Read `crowdbrain-memo-v5.txt` for the design intent.
 3. **Initialize results log**: `results.tsv` with header: `experiment\tscore\tretention\tstability\trevenue\tgini\tqualified\tnotes`. Don't commit it.
 4. **Run baseline**:
    - v3: `python train.py > run.log 2>&1`
    - v4: `python train_v4.py > run.log 2>&1`
+   - v5: `python train_v5.py > run.log 2>&1`
 5. **Record baseline composite**, then start experimenting.
 
 ## Experiment loop
@@ -66,6 +72,11 @@ For broader exploration use the experiment harnesses (each takes MC count as a C
 - `python experiments_v4.py 3` — v4 8-cell pillar ablation + stress (~50 min @ MC=3)
 - `python experiments_v4_iter2.py 2` — v4 tuned-persona iteration
 - `python experiments_v4_iter3.py 2` — 60-month long horizon
+- `python experiments_v5.py track1 10` — v5 Track 1 (tier-unlock, 6 cells) at MC=10 (~13 min on 23 cores)
+- `python experiments_v5.py track2 10` — v5 Track 2 (points-to-tokens, 4 cells)
+- `python experiments_v5.py track3 10` — v5 Track 3 (3-stakeholder loop, 6 cells)
+- `python experiments_v5.py track4 10` — v5 Track 4 (macro stress + milestones, 8 cells)
+- `python experiments_v5.py all 10` — v5 all 4 tracks (24 cells, ~47 min on 23 cores via ProcessPoolExecutor)
 
 ## Research strategy
 

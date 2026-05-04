@@ -20,3 +20,9 @@ v4_remaining_*.txt
 ablation_results.json
 sweep_small_results.csv
 winner_timeseries.csv
+
+# v5 artifacts (regeneratable; track[1-4]_results.json are kept as the source of REPORT_v5.md)
+v5_run.log
+v5_results/all_results.json
+crowdbrain-memo-v5.txt
+crowdbrain-memo-v5_tables.txt

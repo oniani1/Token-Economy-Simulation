@@ -89,6 +89,9 @@ class Customer:
     months_active: int = 0
     monthly_quality_avg: List[float] = field(default_factory=list)         # last 6 months avg quality of operators serving this customer
     monthly_fulfill_pct: List[float] = field(default_factory=list)         # last 6 months hours_fulfilled / hours_demanded
+    # v5 additions (backwards-compatible defaults)
+    is_design_partner: bool = False    # if True, immune to satisfaction churn during contract_term
+    contract_term_months: Optional[int] = None    # multi-year contracts for DPs; None = month-to-month (v4 behavior)
 
 
 # ─── SIZE DISTRIBUTION ─────────────────────────────────────────────────────
@@ -129,17 +132,24 @@ def lambda_segment(
 def spawn_design_partners(
     starting_id: int,
     design_partner_specs: List[Tuple[str, float]] = None,
+    contract_term_months: Optional[int] = None,
 ) -> Tuple[List[Customer], int]:
-    """Seed customers at month 0, one per priority segment with fixed contract size."""
+    """Seed customers at month 0, one per priority segment with fixed contract size.
+
+    v5: contract_term_months (e.g., 24) marks them as multi-year design partners
+    immune to satisfaction-based churn during the term. None = v4 behavior."""
     specs = design_partner_specs or DEFAULT_DESIGN_PARTNERS
     customers = []
     cid = starting_id
+    is_dp = contract_term_months is not None
     for segment, size in specs:
         customers.append(Customer(
             id=cid,
             segment=segment,
             signed_month=0,
             contract_size_usd=size,
+            is_design_partner=is_dp,
+            contract_term_months=contract_term_months,
         ))
         cid += 1
     return customers, cid
@@ -334,11 +344,18 @@ def evaluate_churn_or_expansion(
     # Bootstrap grace: no churn evaluation in first N months after signing
     in_grace = months_since_signing < grace_months
 
+    # v5: Design partners with multi-year contracts are immune to sat-driven churn during the term
+    in_dp_contract = (
+        customer.is_design_partner
+        and customer.contract_term_months is not None
+        and months_since_signing < customer.contract_term_months
+    )
+
     # Need at least N months of history
     if len(customer.sat_history) < churn_consecutive:
         return "hold"
 
-    if not in_grace:
+    if not in_grace and not in_dp_contract:
         last_n_churn = customer.sat_history[-churn_consecutive:]
         if all(s < churn_threshold for s in last_n_churn):
             customer.status = "churned"
