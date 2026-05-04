@@ -37,25 +37,28 @@ from train_v5 import PARAMS_V5
 PARAMS_V5_REALISTIC = copy.deepcopy(PARAMS_V5)
 
 # Customer-side recalibration
+# J-curve calibration: SLOW START + RAPID LATE ACCELERATION.
+# Models the real teleop/robotics adoption curve: years 1-2 modest, year 3+ inflection
+# as teleop/Physical-AI hits the data wall and enterprise demand picks up sharply.
 PARAMS_V5_REALISTIC["customers"]["segments"] = {
     "manufacturing": {
         "demand_profile": {0: 0.0, 1: 0.30, 2: 0.30, 3: 0.15, 4: 0.15, 5: 0.05, 6: 0.05},
-        "size_mean_usd": 35_000,           # was 80_000
+        "size_mean_usd": 25_000,           # was 35_000 (prior realistic); was 80_000 (unrealistic)
         "churn_baseline_yr": 0.15,
     },
     "warehouse": {
         "demand_profile": {0: 0.0, 1: 0.20, 2: 0.40, 3: 0.10, 4: 0.15, 5: 0.10, 6: 0.05},
-        "size_mean_usd": 22_000,           # was 60_000
+        "size_mean_usd": 15_000,           # was 22_000; was 60_000
         "churn_baseline_yr": 0.25,
     },
     "healthcare": {
         "demand_profile": {0: 0.0, 1: 0.05, 2: 0.15, 3: 0.15, 4: 0.20, 5: 0.25, 6: 0.20},
-        "size_mean_usd": 55_000,           # was 120_000 (kept higher due to compliance)
+        "size_mean_usd": 40_000,           # was 55_000; was 120_000 (compliance keeps it higher than other segs)
         "churn_baseline_yr": 0.10,
     },
     "robotics_oem": {
         "demand_profile": {0: 0.0, 1: 0.05, 2: 0.10, 3: 0.15, 4: 0.30, 5: 0.25, 6: 0.15},
-        "size_mean_usd": 45_000,           # was 150_000 (early-stage robotics startups can't afford $150K/mo)
+        "size_mean_usd": 30_000,           # was 45_000; was 150_000
         "churn_baseline_yr": 0.08,
     },
 }
@@ -63,14 +66,20 @@ PARAMS_V5_REALISTIC["customers"]["segments"] = {
 PARAMS_V5_REALISTIC["customers"]["size_distribution"] = {
     "alpha":      1.5,
     "min_factor": 0.10,
-    "max_factor": 1.5,                     # was 3.0 — no mega-whales early stage
+    "max_factor": 1.5,
 }
 
-PARAMS_V5_REALISTIC["customers"]["arrival"]["lambda_max_per_segment"] = 1.0    # was 3.0; 0.5/0.7 too conservative for memo Q4 2026 milestone
+# J-CURVE: customer arrival
+# - Lower lambda_max (slower base rate)
+# - Push midpoint to month 24 (was 13) — most growth happens in year 2-3 not year 1
+# - Steepness gentler so late ramp doesn't spike artificially
+PARAMS_V5_REALISTIC["customers"]["arrival"]["lambda_max_per_segment"] = 0.6    # was 1.0; was 3.0
+PARAMS_V5_REALISTIC["customers"]["arrival"]["lambda_curve_midpoint"] = 24      # was 13 — push inflection to year 2
+PARAMS_V5_REALISTIC["customers"]["arrival"]["lambda_curve_steepness"] = 0.30   # was 0.40 — gentler curve
 PARAMS_V5_REALISTIC["customers"]["arrival"]["design_partners"] = [
-    ("manufacturing",  30_000),            # was 100_000
-    ("warehouse",      20_000),            # was 80_000
-    ("healthcare",     50_000),            # was 150_000
+    ("manufacturing",  20_000),            # was 30_000
+    ("warehouse",      15_000),            # was 20_000
+    ("healthcare",     35_000),            # was 50_000
 ]
 
 # Tier-unlock: switch from revenue-gated (which assumes $50M+ revenue) to op-count
@@ -88,17 +97,28 @@ PARAMS_V5_REALISTIC["customers"]["satisfaction"]["expand_pct"] = 0.10           
 # Bull-market customer arrival multiplier — less FOMO-driven
 PARAMS_V5_REALISTIC["macro"]["sentiment"]["multipliers"]["bull"]["customer_arrival"] = 1.1   # was 1.3
 
-# Era multipliers — less aggressive in growth phase
-PARAMS_V5_REALISTIC["macro"]["era"]["era_multipliers"]["growth"]["customer_arrival"] = 1.2   # was 1.5
-PARAMS_V5_REALISTIC["macro"]["era"]["era_multipliers"]["maturity"]["customer_arrival"] = 1.0  # was 1.2
+# J-CURVE v2 (refined 2026-05-05 per user):
+#   Year 1 + first half of year 2 (m1-18): slow start, customer_arrival × 0.6
+#   Second half year 2 → first half year 3 (m18-30): MILD pickup, × 1.4 (not aggressive)
+#   Second half year 3 onwards (m30+): TAKE OFF, × 4.0 (Physical-AI mainstream era)
+PARAMS_V5_REALISTIC["macro"]["era"]["era_multipliers"] = {
+    "bootstrap": {"emission": 1.0, "referral": 0.8, "customer_arrival": 0.6},   # m1-18 SLOW START
+    "growth":    {"emission": 1.0, "referral": 1.3, "customer_arrival": 1.4},    # m18-30 MILD pickup
+    "maturity":  {"emission": 0.7, "referral": 1.5, "customer_arrival": 4.0},    # m30+ TAKE OFF
+}
+# Era thresholds: bootstrap → growth at m18 (mid year 2); growth → maturity at m30 (mid year 3)
+PARAMS_V5_REALISTIC["macro"]["era"]["growth_month_threshold"] = 18      # mid year 2 — mild acceleration begins
+PARAMS_V5_REALISTIC["macro"]["era"]["growth_rev_threshold"] = 1_500_000  # lower trigger so growth fires reliably
+PARAMS_V5_REALISTIC["macro"]["era"]["maturity_month_threshold"] = 30     # mid year 3 — TAKE OFF (was 36)
+PARAMS_V5_REALISTIC["macro"]["era"]["maturity_rev_threshold"] = 8_000_000  # was 15M — earlier maturity on revenue too
 
 # Lower the customer-facing blended hourly rate (closer to memo $5-12 range)
 PARAMS_V5_REALISTIC["customers"]["usd_per_hour_blended"] = 18.0                # was 25.0
 
-# Operator onboarding multiplier — scales to memo's "1K trained operators @ Q3 2026"
-# target. Default v3/v4 onboarding builds ~120K total operators; for realistic
-# customer demand (~80 customers, ~30K hrs/mo total) we need ~3-5K active ops.
-PARAMS_V5_REALISTIC["task_model"]["onboarding_multiplier"] = 0.35              # was 1.0; 0.20 was too low
+# Operator onboarding multiplier — memo-aligned (1K trained at Q3 2026 milestone).
+# Default v3/v4 onboarding builds ~120K total operators; mult 0.10 builds ~12K
+# total ever-onboarded over 36 months, ~3-5K active. Series-A robotics scale.
+PARAMS_V5_REALISTIC["task_model"]["onboarding_multiplier"] = 0.10              # was 0.35; was 1.0
 
 # Token emission: scale down to match realistic revenue / burn ratio.
 # v4 winner emits 3M/mo with $73M cum revenue. Realistic revenue is ~$10-20M cum,

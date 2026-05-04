@@ -8,8 +8,8 @@ The point of the project is **not** to predict a token price. It is to find a pa
 
 ## TL;DR
 
-- **Four simulation generations + a realistic-mode recalibration.** v2 (24-month, supply-side only) → v3 (36-month, multi-witness peer validation, treasury & nodes as first-class agents) → v4 (36/60-month, layered persona + customer + macro pillars on top of v3) → **v5** (memo-v5 redesign: conditional tier unlock, bonded node-providers, 3-region geography, points→token transition, multi-year design-partner contracts) → **v5_realistic** (recalibrated to defensible-vs-real-world numbers; smaller contracts, slower customer arrival, scaled-down operator onboarding).
-- **The headline recommended config is `realistic_baseline_60mo`** — composite **0.844 ± 0.012** at 60 months under realistic params, **$37M final ARR**, **162 customers**, **$86M cumulative revenue**, **16,570 T4+ operators**. This config beats v4_no_personas (0.7575) by +0.087 composite *and* uses revenue numbers that are defensible against real-world Series-B robotics-data startups (Scale AI was ~$10M ARR at year 3 with thousands of customers).
+- **Four simulation generations + iterative realistic recalibration.** v2 → v3 → v4 → v5 → v5_realistic → **v5_realistic_jcurve (iter4)** — the latest calibration models a **J-curve trajectory** (slow first 18 months, mild pickup mid year 2 → mid year 3, take-off from month 30+) that matches how real Physical-AI / teleop markets mature.
+- **The headline recommended config is `jcurve_combined_60mo`** — composite **0.683 ± 0.020** at 60 months under the J-curve realistic baseline + iter3 winners (op_loose unlock + $100 hardware stake): **$24.4M final ARR**, **185 customers**, **2,582 T4+ operators**, **$40M cumulative revenue**. These numbers are explicitly defensible against real-world Series-A → Series-B robotics-data peers (Scale AI was ~$10M ARR at year 3 with thousands of customers; CrowdBrain wedge is narrower but reaches Series-B trajectory by year 5).
 - **Three iterations of sweeps** (47 + 47 + 35 min wall time, parallelized across 23 cores, 850 total runs at MC=10–50): iter1 found the v5 layer cost was 0.21 composite vs v4-equivalent under unrealistic numbers; iter2 found `stake_300` and `unlock_revenue_gated` were the winners under unrealistic params; **iter3 (realistic) flipped both findings** — `stake_100` is optimal under realistic params, and `unlock_op_loose` (10/5/2 op-count thresholds) dominates over revenue-gating.
 - **Q4 2026 milestone (3+ paying customers, $500K+ ARR @ month 8) is marginal at MC=50**: P(hit) = 12%, mean Q4 customers = 4.6 ✓, mean Q4 ARR = $413K (just below target). The customer-count target is consistently met; the ARR threshold needs either re-targeting or an accelerated launch.
 - **Six v5 findings (unrealistic mode) worth reading** are documented in `REPORT_v5.md`: tier-unlock gating improves the system, the token economy is load-bearing (m12 cutover beats points-only by 23%), bond size barely matters but facility/community split does, Tesla/1X wage anchor is a non-issue, funding winter + MVP slip are existential threats, and Georgia is the most load-bearing region.
@@ -172,6 +172,7 @@ The v3 rebuild centered on the memo's multi-witness validation:
 | v5 | Conditional tier unlock (T3–T5 gated by revenue/op count/time); bonded node-providers (facility/community split + reporting/dispute); 3-region operator pool (Georgia/Philippines/Kenya) with cost/retention/skill ramp; points→tokens transition; multi-year design-partner contracts; parallelized MC orchestrator | 36 months | **0.535 ± 0.039** path-baseline; **0.574** with Intelligence Library at m24 | $26.3M baseline, $37.1M with Intel Library |
 | v5_iter2 | Pareto sweep at MC=20 (18 cells × 3 phases) targeting iter1 sub-score drags. Found stake_300 + unlock_revenue_gated optimal under unrealistic params. Combo of 4 winners stacks at +0.025. | 36 months | **0.597 ± 0.087** (stake_300 winner); 0.772 if all v5 layers off (= v4_no_personas reference) | $41M (stake_300); $84M (layers_off) |
 | v5_iter3 (REALISTIC) | Recalibrated customer model (smaller contracts, slower arrival), scaled-down operator onboarding, smaller token supply, lower hardware stakes. 4 phases + Q4 2026 milestone at MC=50. | 36 / **60 months** | **0.663** @ 36mo baseline; **0.844 ± 0.012** @ 60mo (BEATS v4_no_personas) | $24M @ 36mo, **$86M @ 60mo** |
+| v5_iter4 (J-CURVE) | Refined to J-curve adoption: slow first 18 months → mild pickup m18-30 → take-off m30+. Operator onboarding ×0.10 (memo-aligned 1K trained @ Q3 2026). Smaller contracts. 4 phases + sensitivity ±20% + Q4 milestone. | 36 / 60 months | **0.683 ± 0.020** @ 60mo (jcurve_combined) | **$40M @ 60mo, $24M ARR end-of-sim, 185 customers** |
 
 **v2's 0.8876 is not directly comparable to v3/v4 scores** — v2 used different score weights and a different scoring scale. v3 introduced 9 sub-scores with stricter caps; the same underlying economy scores lower under v3 weights because the ceiling is harder to hit.
 
@@ -671,12 +672,17 @@ crowdbrain-memo-v5.txt     Plain-text extract for grepping.
 
 ## Recommended launch configurations
 
-Four viable configurations depending on what you need to defend. **For stakeholder narratives, lead with Option D (realistic). For optimistic upside framing, Option A. For risk modeling, Option B.**
+Five viable configurations. **For stakeholder narratives, lead with Option E (J-curve realistic). For upside framing, Option A. For risk modeling, Option B.**
 
-- **Option D — `v5_realistic_baseline_60mo`** (RECOMMENDED for stakeholder use):
+- **Option E — `jcurve_combined_60mo`** (RECOMMENDED for stakeholder use, supersedes Option D):
+  Composite **0.683 ± 0.020** at 60 months, **$24M final ARR**, **185 customers**, **2,582 T4+ operators**, **$40M cumulative revenue**.
+  J-curve realistic calibration (slow first 18mo, mild pickup m18-30, take-off m30+) + iter3 winners (op_count tier unlock 10/5/2 + $100 T3 hardware stake).
+  **Best for stakeholder-facing narratives — numbers explicitly defensible against real Series-A → B robotics-data peers.** Models the actual Physical-AI / teleop adoption curve (slow start while market matures, inflection as data hunger hits, take-off as Physical-AI mainstreams).
+  Uses `train_v5_realistic.py` + `prepare_v5.py` + iter3 winner overrides.
+
+- **Option D — `v5_realistic_baseline_60mo` (deprecated as headline; kept for upside framing)**:
   Composite **0.844 ± 0.012** at 60 months, **$37M final ARR**, **162 customers**, **$86M cumulative revenue**, **16,570 T4+ operators**.
-  Realistic calibration (smaller contracts, slower customer arrival, scaled-down operator onboarding) + all v5 layers on (op-count tier unlock, bonded node-providers, geography, token economy).
-  **Best for stakeholder-facing narratives** — numbers defensible vs Series-B robotics-data peers, late-stage compounding tells a clean Series-A → C story, all 9 v5 design questions answered. Uses `train_v5_realistic.py` + `prepare_v5.py`.
+  iter3 calibration — realistic vs early sims but operator counts (16K T4+, 30K active) are aggressive vs Series-A/B peers. Use this for **bull-case scenario** with explicit footnote about being top-decile execution.
 
 - **Option A — `v4_no_personas`** (max-upside scenario, optimistic framing):
   0.7575 composite @ 36mo, 0.811 @ 60mo, **$389M revenue**, 37K T4+, top-3 concentration 7.5%, NRR 0.56×.
