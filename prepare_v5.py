@@ -369,6 +369,9 @@ def run_simulation_v5(params: Dict, seed: int = RANDOM_SEED) -> Tuple[List[Dict]
         organic_count = monthly_onboarding_schedule(month)
         # Apply sentiment multiplier to acquisition
         organic_count = int(organic_count * sent_mults.get("op_acquisition", 1.0))
+        # v5: realistic-mode onboarding multiplier (scales to memo's 1K trained @ Q3 2026 target)
+        op_onboarding_mult = get_nested(params, "task_model.onboarding_multiplier", 1.0)
+        organic_count = int(organic_count * op_onboarding_mult)
 
         new_count = organic_count
 
