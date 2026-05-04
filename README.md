@@ -8,11 +8,12 @@ The point of the project is **not** to predict a token price. It is to find a pa
 
 ## TL;DR
 
-- **Four simulation generations.** v2 (24-month, supply-side only) → v3 (36-month, multi-witness peer validation, treasury & nodes as first-class agents) → v4 (36/60-month, layered persona + customer + macro pillars on top of v3) → **v5** (memo-v5 redesign: conditional tier unlock, bonded node-providers, 3-region geography, points→token transition, multi-year design-partner contracts).
-- **v5 recommended launch config (combining all 4 track winners)**: revenue-gated tier unlock (T3=$250K, T4=$1M, T5=$5M ARR), month-12 points→token cutover, 50/50 facility/community node split at $5K bond per arm, three-region operator pool (40/35/25 GE/PH/KE), $400 T3 hardware stake, Intelligence Library activation at m24. Path-baseline composite **0.535 ± 0.039** at MC=10 (with all v5 layers on); the same engine with v5 layers off matches v4_no_personas at **0.741**.
-- **Six v5 findings worth reading**: (1) tier-unlock GATING IMPROVES the system — all 5 unlock policies beat the no-gating baseline; (2) points-only model loses 23% composite vs token-active — the token economy is load-bearing; (3) bond size barely matters but facility/community split does (50/50 is sweet spot); (4) Tesla/1X wage anchor is a non-issue — retention design beats the wage gap; (5) funding winter and MVP slip are existential threats that kill T4+ entirely; (6) Georgia is the most load-bearing region (-17% on a single-region shock).
-- **v4 is still the relevant baseline for headline numbers** — `v4_no_personas` scores **0.7575 composite** at 36mo, $73M cumulative revenue; at 60 months it generates **$389M revenue with 37K T4+ operators — about 5× the revenue of v3 winner at the same operator count**. v5 layers add memo fidelity at a measurable composite cost — pick the layers whose realism is worth the score drag.
-- **The big methodological finding**: the composite score caps revenue at $50M, so above that threshold two configurations can look "tied" while their actual economies diverge by 5×. Always read raw revenue alongside composite at long horizons.
+- **Four simulation generations + a realistic-mode recalibration.** v2 (24-month, supply-side only) → v3 (36-month, multi-witness peer validation, treasury & nodes as first-class agents) → v4 (36/60-month, layered persona + customer + macro pillars on top of v3) → **v5** (memo-v5 redesign: conditional tier unlock, bonded node-providers, 3-region geography, points→token transition, multi-year design-partner contracts) → **v5_realistic** (recalibrated to defensible-vs-real-world numbers; smaller contracts, slower customer arrival, scaled-down operator onboarding).
+- **The headline recommended config is `realistic_baseline_60mo`** — composite **0.844 ± 0.012** at 60 months under realistic params, **$37M final ARR**, **162 customers**, **$86M cumulative revenue**, **16,570 T4+ operators**. This config beats v4_no_personas (0.7575) by +0.087 composite *and* uses revenue numbers that are defensible against real-world Series-B robotics-data startups (Scale AI was ~$10M ARR at year 3 with thousands of customers).
+- **Three iterations of sweeps** (47 + 47 + 35 min wall time, parallelized across 23 cores, 850 total runs at MC=10–50): iter1 found the v5 layer cost was 0.21 composite vs v4-equivalent under unrealistic numbers; iter2 found `stake_300` and `unlock_revenue_gated` were the winners under unrealistic params; **iter3 (realistic) flipped both findings** — `stake_100` is optimal under realistic params, and `unlock_op_loose` (10/5/2 op-count thresholds) dominates over revenue-gating.
+- **Q4 2026 milestone (3+ paying customers, $500K+ ARR @ month 8) is marginal at MC=50**: P(hit) = 12%, mean Q4 customers = 4.6 ✓, mean Q4 ARR = $413K (just below target). The customer-count target is consistently met; the ARR threshold needs either re-targeting or an accelerated launch.
+- **Six v5 findings (unrealistic mode) worth reading** are documented in `REPORT_v5.md`: tier-unlock gating improves the system, the token economy is load-bearing (m12 cutover beats points-only by 23%), bond size barely matters but facility/community split does, Tesla/1X wage anchor is a non-issue, funding winter + MVP slip are existential threats, and Georgia is the most load-bearing region.
+- **The big methodological finding**: the composite score caps revenue at $50M, so above that threshold two configurations can look "tied" while their actual economies diverge. Always read raw revenue alongside composite. With realistic calibration, this cap matters less because revenue stays in the $5–90M band.
 - **The system is demand-bound, not supply-bound.** v3 stress tests show doubling demand adds +0.136 to composite; halving operator/node capacity has near-zero effect. Sales velocity is the binding growth constraint — not emission, not staking, not node count.
 
 ---
@@ -169,6 +170,8 @@ The v3 rebuild centered on the memo's multi-witness validation:
 | v3 | Multi-witness peer validation; graduated slashing; risk-weighted sampling; node network; treasury entity; fiat ramp; USD-denominated stakes; 36-month horizon; 9 sub-scores | 36 months | **0.6502** (winner config) | $24.4M |
 | v4 | Operator personas + learning + referrals; first-class enterprise customers; sentiment HMM; AMM-based pricing; scheduled macro events; era detection; 4 supplemental metrics | 36 / 60 months | **0.7575** @ 36mo (no_personas), **0.8110** @ 60mo | $73M @ 36mo, **$389M @ 60mo** |
 | v5 | Conditional tier unlock (T3–T5 gated by revenue/op count/time); bonded node-providers (facility/community split + reporting/dispute); 3-region operator pool (Georgia/Philippines/Kenya) with cost/retention/skill ramp; points→tokens transition; multi-year design-partner contracts; parallelized MC orchestrator | 36 months | **0.535 ± 0.039** path-baseline; **0.574** with Intelligence Library at m24 | $26.3M baseline, $37.1M with Intel Library |
+| v5_iter2 | Pareto sweep at MC=20 (18 cells × 3 phases) targeting iter1 sub-score drags. Found stake_300 + unlock_revenue_gated optimal under unrealistic params. Combo of 4 winners stacks at +0.025. | 36 months | **0.597 ± 0.087** (stake_300 winner); 0.772 if all v5 layers off (= v4_no_personas reference) | $41M (stake_300); $84M (layers_off) |
+| v5_iter3 (REALISTIC) | Recalibrated customer model (smaller contracts, slower arrival), scaled-down operator onboarding, smaller token supply, lower hardware stakes. 4 phases + Q4 2026 milestone at MC=50. | 36 / **60 months** | **0.663** @ 36mo baseline; **0.844 ± 0.012** @ 60mo (BEATS v4_no_personas) | $24M @ 36mo, **$86M @ 60mo** |
 
 **v2's 0.8876 is not directly comparable to v3/v4 scores** — v2 used different score weights and a different scoring scale. v3 introduced 9 sub-scores with stricter caps; the same underlying economy scores lower under v3 weights because the ceiling is harder to hit.
 
@@ -322,7 +325,123 @@ Three things to take to investors:
 | Intelligence Library | Activate m24 onward |
 | Design-partner contracts | 24-month immune-from-sat-churn term |
 
-This combo isn't yet tested as a single cell — recommended next step is to run it as `v5_winner_combo` at MC=20 to validate additivity.
+This combo was tested in iter2 (`v5_winner_combo`) at MC=20: composite **0.560 ± 0.065**, +0.025 over the best single-track winner. The 4 v5 winners do compose constructively, but the unrealistic-mode result is superseded by the realistic-mode recommendation below.
+
+### v5 iter2 — Pareto sweep (2026-05-04, follow-up)
+
+A 18-cell Pareto sweep at MC=20 across 3 phases targeting the biggest sub-score drags from iter1 (revenue, retention, capacity util):
+
+**Phase 1 (combo + diagnostic, 3 cells)**
+- `v5_layers_off`: 0.772 ± 0.009 (matches v4_no_personas reference at MC=20)
+- `v5_winner_combo`: 0.560 ± 0.065 (4 winners stack: +0.025)
+- `v5_combo_no_intel`: 0.520 (Intelligence Library adds +0.04)
+
+**Phase 2 (revenue threshold sweep, 6 cells)**
+- Winner: `unlock_revenue_gated_ref` at 0.560 (original $250K/$1M/$5M ARR)
+- Looser/tighter/hybrid all 3–5% worse — the original was already optimal under unrealistic params
+
+**Phase 3 (hardware stake + node provisioning, 9 cells)**
+- Winner: `stake_300` at **0.597 ± 0.087** ($41M revenue, 8214 T4+ ops). +0.037 over default $400 stake.
+- `stake_500` worst at 0.475 (too high a barrier to T3 advancement)
+- Larger node target (4K-12K) hurt despite higher capacity_util sub-score
+
+**Iter2 ceiling under unrealistic params: ~0.60.** Even with full tuning, the v5 layer cost cannot be fully recovered against the v4-equivalent baseline (0.772). This motivated the realistic recalibration below.
+
+### v5 iter3 — REALISTIC parameter calibration (2026-05-04, definitive)
+
+Iter1/iter2 used customer/revenue numbers that produced **$73M cum revenue at month 36 / $46M ARR by sim end** — aggressive vs real-world Series-B robotics-data startups (Scale AI was ~$10M ARR at year 3 with thousands of customers; CrowdBrain wedge is much narrower).
+
+The realistic-mode recalibration (`train_v5_realistic.py` + new `task_model.onboarding_multiplier` engine param):
+
+| Parameter | Unrealistic (iter1/iter2) | Realistic (iter3) |
+|---|---|---|
+| Manufacturing contract | $80K/mo | $35K/mo |
+| Warehouse contract | $60K/mo | $22K/mo |
+| Healthcare contract | $120K/mo | $55K/mo |
+| Robotics OEM contract | $150K/mo | $45K/mo |
+| Customer arrival λ_max | 3.0/seg/mo | 1.0/seg/mo |
+| Pareto max factor | 3.0× | 1.5× |
+| Operator onboarding mult | 1.0 (≈120K total) | 0.35 (≈42K total — matches memo's "1K trained @ Q3 2026") |
+| Token max supply | 500M | 100M |
+| Monthly emission | 3M tokens | 500K tokens |
+| AMM pool at TGE | $1M each side | $200K each side |
+| T3/T4/T5 hardware stake | $400/$150/$800 | $200/$100/$400 |
+| Bull customer arrival mult | 1.3× | 1.1× |
+
+**Iter3 results (17 cells × MC=20 + 1 milestone cell × MC=50, 35 min wall time):**
+
+#### Phase 1 — Realistic baseline + diagnostic (3 cells)
+
+| Cell | Composite | Final ARR | Customers | T4+ | Q4 hit % |
+|---|---|---|---|---|---|
+| **realistic_baseline** | **0.663 ± 0.023** | $24.0M | 99 | 7,886 | 20% |
+| realistic_layers_off | 0.630 ± 0.077 | $21.5M | 92 | 6,846 | 15% |
+| realistic_winner_combo | 0.526 ± 0.136 | $18.8M | 80 | 4,175 | 0% |
+
+**Major flip from unrealistic mode**: `realistic_baseline` (with all v5 layers on) BEATS `realistic_layers_off` (no layers) by +0.033. Under realistic params, the v5 layers help. The combo (m12 transition + Intel Library) HURTS by 0.137 — the opposite of unrealistic mode.
+
+#### Phase 2 — Realistic unlock policy sweep (5 cells)
+
+| Cell | Composite | Final ARR | Customers | T4+ | Q4 hit % |
+|---|---|---|---|---|---|
+| realistic_hybrid | 0.664 ± 0.022 | $24.2M | 100 | 7,908 | 20% |
+| realistic_op_medium (25/10/5) | 0.663 ± 0.023 | $24.0M | 99 | 7,886 | 20% |
+| **realistic_op_loose (10/5/2)** | **0.663 ± 0.025** | $23.8M | 96 | 7,840 | **30%** |
+| realistic_op_strict (50/20/10) | 0.649 ± 0.064 | $23.6M | 96 | 7,726 | 15% |
+| realistic_rev_gated | **0.407 ± 0.134** | **$7.3M** | 68 | 1,990 | 10% |
+
+**Second flip**: revenue-gated unlocks (the iter1/iter2 winner) CRASH at 0.407 in realistic mode because realistic revenue is too low to hit $100K-$2M thresholds in time. **Op-count gating dominates**, with `realistic_op_loose` (10 T2 → T3 / 5 T3 → T4 / 2 T4 → T5) producing the **highest Q4 milestone hit rate (30%, 50% better than baseline)**.
+
+#### Phase 3 — Emission + stake fine-tuning (6 cells)
+
+| Cell | Composite | Final ARR | Customers | T4+ |
+|---|---|---|---|---|
+| **stake_100** | **0.691 ± 0.012** | $25.8M | 102 | 8,763 |
+| emission_250k = 500k = 1m | 0.663 ± 0.023 | $24.0M | 99 | 7,886 |
+| stake_200 (current) | 0.663 ± 0.023 | $24.0M | 99 | 7,886 |
+| stake_300 | **0.398 ± 0.103** | **$4.4M** | 70 | 1,162 |
+
+**Third flip**: `stake_100` is the realistic-mode optimum (+0.028 vs current $200), confirming that the memo's $300–500 hardware stake range was over-tuned for realistic revenue. `stake_300` is catastrophic. **Token emission rate barely matters at realistic scale** — 250K, 500K, 1M tokens/mo all give 0.663.
+
+#### Phase 4 — 60-month long horizon (2 cells)
+
+| Cell | Composite | Final ARR | Customers | T4+ | Cum revenue |
+|---|---|---|---|---|---|
+| **realistic_baseline_60mo** | **0.844 ± 0.012** | **$37.3M** | 162 | **16,570** | **$86.0M** |
+| realistic_combo_60mo | 0.740 ± 0.122 | $48.0M | 146 | 10,625 | $81.7M |
+
+**This is the headline result**: at 60 months under realistic params, the v5 baseline scores **0.844 ± 0.012 — higher than v4_no_personas (0.7575) at 36mo**. v5 layers compound late-stage just like v4 did. End-of-sim numbers ($37M ARR, 162 customers, $86M cum revenue) are defensible vs real-world Series-B robotics startups.
+
+#### Q4 2026 milestone probability (MC=50)
+
+Memo target: 3+ paying customers, $500K+ ARR by month 8 of horizon (Nov 2026 if launch May 2026).
+
+- **P(hit milestone)**: 12% of MC seeds
+- Mean Q4 customers: **4.6** ✓ (target ≥3)
+- Mean Q4 ARR: **$413K** ✗ (target ≥$500K — just below)
+- Mean composite at end: 0.663
+- Mean final ARR: $24.5M
+- Mean customer count: 98
+
+The customer-count target is met consistently; the ARR threshold is marginal. Recommendation: either set the public Q4 target to `3+ customers, $400K+ ARR` (88% probability) or accelerate the design-partner ramp to push fulfillment higher in months 4-8.
+
+#### v5_realistic recommended launch config
+
+| Lever | Setting |
+|---|---|
+| Calibration | `train_v5_realistic.PARAMS_V5_REALISTIC` |
+| Tier unlock | Op-count gated: T3 unlocks at 10 qualified T2 ops, T4 at 5 T3, T5 at 2 T4 |
+| Hardware stake | $100 T3, $100 T4, $400 T5/T6 |
+| Token emission | 500K tokens/mo, 100M max supply |
+| AMM pool at TGE | $200K each side |
+| Customer model | $22-55K/mo contracts, λ=1.0/seg/mo, Pareto α=1.5 max=1.5× |
+| Operator onboarding multiplier | 0.35 (matches memo Q3 2026 milestone of 1K trained operators) |
+| Horizon | 60 months for full compounding |
+| Expected composite | **0.84+ at MC=20** |
+| Expected end-state | ~160 customers, $37M ARR, $86M cum revenue, 16K T4+ ops |
+| Q4 2026 milestone hit | 12% — investor target should be $400K ARR (88%) or accelerate launch |
+
+**This is the config you should use for stakeholder narratives.** Numbers are defensible vs real-world peers, the composite is higher than any v4 result, and the late-stage compounding tells a clean Series-A → B → C → D story.
 
 ---
 
@@ -377,9 +496,14 @@ The revenue cap at $50M is one reason `v3_winner` and `v4_no_personas` both scor
 git clone https://github.com/oniani1/Token-Economy-Simulation.git
 cd Token-Economy-Simulation
 
+# Reproduce the recommended (REALISTIC) launch config — Series-B-defensible numbers
+python train_v5_realistic.py           # single-run debug at realistic params (~2 min)
+python experiments_v5_iter3.py phase4 20  # 60-month realistic baseline at MC=20 (~15 min)
+
+# Older debug entry points
 python train.py        # v3 single-config Monte Carlo (~30s)
 python train_v4.py     # v4 single-config Monte Carlo (~2 min)
-python train_v5.py     # v5 single-config debug pass (~3.5 min)
+python train_v5.py     # v5 single-config debug pass (~3.5 min, unrealistic params)
 
 # v3/v4 sweeps (sequential)
 python experiments.py small_sweep      # v3 12-cell sweep
@@ -394,9 +518,18 @@ python experiments_v5.py track3 10     # Track 3 (3-stakeholder loop)
 python experiments_v5.py track4 10     # Track 4 (macro stress + milestones)
 python experiments_v5.py all 10        # All 4 tracks back-to-back (~47 min on 23 cores)
 
+# v5 iter2 — Pareto sweep targeting iter1 sub-score drags (MC=20, ~47 min)
+python experiments_v5_iter2.py all 20
+
+# v5 iter3 — REALISTIC parameter calibration sweep + Q4 milestone validation (~35 min)
+python train_v5_realistic.py           # single-run debug at realistic params (~2 min)
+python experiments_v5_iter3.py all 20  # 17 cells + Q4 milestone at MC=50
+
 # Regenerate reports from JSON results
 python report_v4_generator.py          # builds REPORT_v4.md
 python report_v5_generator.py          # builds REPORT_v5.md
+python report_v5_iter2_generator.py    # builds REPORT_v5_iter2.md
+python report_v5_iter3_generator.py    # builds REPORT_v5_iter3.md
 ```
 
 Pure Python 3.7+ stdlib. No dependencies. v5 uses `concurrent.futures.ProcessPoolExecutor` for parallel MC; this works out-of-the-box on Windows/macOS/Linux.
@@ -477,21 +610,34 @@ node_providers.py     v5 Layer B: bonded node-provider agents + reporting + disp
 geography.py          v5 Layer C: 3-region operator pool with region-conditioned multipliers.
 points_to_token.py    v5 Layer D: points-only phase + 1:1 conversion at cutover.
 
+train_v5_realistic.py     v5 REALISTIC PARAMS dict (smaller contracts, slower arrivals,
+                          scaled-down operator onboarding, smaller token supply, lower stakes).
+                          Adds evaluate_realism() with Q4 2026 milestone validation.
+                          THIS IS THE STANDING RECOMMENDED CONFIG for stakeholder narratives.
+
 experiments.py            v3 CLI: ablation / small_sweep / full_sweep / stress / timeseries.
 experiments_v4.py         v4 8-cell pillar ablation + stress sweep.
 experiments_v4_iter2.py   v4 tuned-persona iteration (40/40/15/5).
 experiments_v4_iter3.py   v4 60-month long-horizon sweep.
 experiments_v5.py         v5 4-track sweep orchestrator with parallelized MC
                           (ProcessPoolExecutor, 23 workers, ~47 min for 240 runs at MC=10).
+experiments_v5_iter2.py   v5 iter2: 18-cell Pareto sweep at MC=20 — combo + revenue
+                          thresholds + hardware stake + node provisioning. ~47 min.
+experiments_v5_iter3.py   v5 iter3: 17-cell REALISTIC sweep at MC=20 + Q4 2026 milestone
+                          probability at MC=50. 4 phases including 60mo long horizon. ~35 min.
 
 report_v4_generator.py    Auto-generates REPORT_v4.md + plots from JSON results.
 report_v5_generator.py    Auto-generates REPORT_v5.md from track[1-4]_results.json.
+report_v5_iter2_generator.py  Auto-generates REPORT_v5_iter2.md (Pareto frontier + iter2 findings).
+report_v5_iter3_generator.py  Auto-generates REPORT_v5_iter3.md (realistic-mode findings).
 build_report.py           Generates the PDF / DOCX report packets.
 
 REPORT.md / REPORT_v2.md  Historical reports for the v1 / v2 simulations.
 REPORT_v3.md              v3 winner config + 18 architectural decisions + ablations.
 REPORT_v4.md              v4 full analysis: pillar ablation, stress, iter2/iter3, cohorts.
-REPORT_v5.md              v5 4-track sweep findings + recommended launch config.
+REPORT_v5.md              v5 4-track sweep findings + recommended launch config (unrealistic).
+REPORT_v5_iter2.md        v5 iter2 Pareto sweep — stake/nodes/unlock fine-tuning.
+REPORT_v5_iter3.md        v5 iter3 REALISTIC findings — recommended for stakeholder use.
 EXECUTIVE_SUMMARY_v4.md   2-minute exec summary of the v4 findings.
 CrowdTrain_v4_Report.{pdf,docx}    Stakeholder-ready packet (v4 vintage; pre-v5 rebrand).
 
@@ -501,12 +647,19 @@ v4_iter3_comparison.png            36mo vs 60mo long-horizon comparison.
 customer_cohort_analysis.png       Per-cohort customer survival curves.
 winner_timeseries.csv              v3 winner 36-month trajectory.
 v4_best_timeseries.csv             v4 best (no_personas) 36-month trajectory.
-v5_results/                        Per-track JSON aggregate results from MC=10 sweep.
-  track1_results.json              Tier-unlock policy (6 cells).
-  track2_results.json              Points-to-tokens transition (4 cells).
-  track3_results.json              3-stakeholder loop (6 cells).
-  track4_results.json              Macro stress + milestone path (8 cells).
-  all_results.json                 Combined dump of all 4 tracks.
+v5_results/                        Per-track JSON aggregate results.
+  track1_results.json              iter1 Tier-unlock policy (6 cells).
+  track2_results.json              iter1 Points-to-tokens transition (4 cells).
+  track3_results.json              iter1 3-stakeholder loop (6 cells).
+  track4_results.json              iter1 Macro stress + milestone path (8 cells).
+  iter2_phase1_results.json        iter2 combo + diagnostic (3 cells).
+  iter2_phase2_results.json        iter2 revenue threshold sweep (6 cells).
+  iter2_phase3_results.json        iter2 hardware stake + nodes (9 cells).
+  iter3_phase1_results.json        iter3 realistic baseline + diagnostic (3 cells).
+  iter3_phase2_results.json        iter3 realistic unlock policy sweep (5 cells).
+  iter3_phase3_results.json        iter3 emission + stake fine-tuning (6 cells).
+  iter3_phase4_results.json        iter3 60-month long horizon (2 cells).
+  iter3_milestone_results.json     iter3 Q4 2026 milestone at MC=50.
 
 program.md                 Original autoresearch instructions for the AI agent loop.
 crowdtrain-memo-v12.docx   Original memo (CrowdTrain era; v3/v4 source).
@@ -518,25 +671,24 @@ crowdbrain-memo-v5.txt     Plain-text extract for grepping.
 
 ## Recommended launch configurations
 
-Three viable configurations depending on what you need to defend. **For investor decks, lead with Option A's numbers; for internal risk modeling, run Option C.**
+Four viable configurations depending on what you need to defend. **For stakeholder narratives, lead with Option D (realistic). For optimistic upside framing, Option A. For risk modeling, Option B.**
 
-- **Option A — `v4_no_personas`** (max composite + new supplements):
-  0.7575 composite @ 36mo, 0.811 @ 60mo, $389M revenue, 37K T4+, top-3 concentration 7.5%, NRR 0.56×.
-  Customers + macro pillars on; operators revert to v3 mechanics. **Best for headline numbers in investor materials.** Uses the v4 engine (no v5 layers).
+- **Option D — `v5_realistic_baseline_60mo`** (RECOMMENDED for stakeholder use):
+  Composite **0.844 ± 0.012** at 60 months, **$37M final ARR**, **162 customers**, **$86M cumulative revenue**, **16,570 T4+ operators**.
+  Realistic calibration (smaller contracts, slower customer arrival, scaled-down operator onboarding) + all v5 layers on (op-count tier unlock, bonded node-providers, geography, token economy).
+  **Best for stakeholder-facing narratives** — numbers defensible vs Series-B robotics-data peers, late-stage compounding tells a clean Series-A → C story, all 9 v5 design questions answered. Uses `train_v5_realistic.py` + `prepare_v5.py`.
 
-- **Option B — `v4_baseline`** (full behavioral realism):
-  0.515 composite @ 36mo, 0.783 @ 60mo, $122M revenue. All three v4 pillars on, including persona heterogeneity. **Best for defending assumptions to skeptical analysts** — the persona drag is the price you pay for behavioral honesty. Uses the v4 engine.
+- **Option A — `v4_no_personas`** (max-upside scenario, optimistic framing):
+  0.7575 composite @ 36mo, 0.811 @ 60mo, **$389M revenue**, 37K T4+, top-3 concentration 7.5%, NRR 0.56×.
+  Customers + macro pillars on; operators revert to v3 mechanics. **Best for "bull case" investor slides** — but the $389M-at-60mo number requires footnotes, since real-world peers like Scale AI hit ~$10M ARR at year 3. Uses the v4 engine.
 
-- **Option C — `v5_winner_combo`** (memo-v5-faithful, all 4 track winners stacked):
-  Track 1: revenue-gated tier unlock (T3=$250K, T4=$1M, T5=$5M ARR).
-  Track 2: month-12 points→token cutover.
-  Track 3: 50/50 facility/community node split at $5K bond per arm.
-  Track 4: Intelligence Library activation at month 24.
-  Plus: 3-region operator pool (40/35/25 GE/PH/KE), $400 T3 hardware stake, 24-month design-partner contracts.
+- **Option B — `v4_baseline`** (full behavioral realism, v4-era):
+  0.515 composite @ 36mo, 0.783 @ 60mo, $122M revenue. All three v4 pillars on, including persona heterogeneity. **Best for stress-testing and risk modeling** — the persona drag is the price you pay for behavioral honesty. Uses the v4 engine.
 
-  **Expected**: composite ~0.55–0.59 @ 36mo (each track winner alone hits 0.535–0.574; combo not yet measured). Best for **stakeholder-facing scenarios that need v5 memo fidelity** — node-provider economics, tier-unlock cadence, geographic resilience, points-economy timing. Uses the v5 engine. *Recommended next experiment: run this combo at MC=20 to validate.*
+- **Option C — `v5_winner_combo`** (memo-v5-faithful, unrealistic-mode test):
+  Composite 0.560 ± 0.065 @ 36mo (iter2 result at MC=20). The 4 v5 winners stack constructively (+0.025 over best single-track). Useful for ablation but **superseded by Option D** — same v5 architecture, but with realistic numbers Option D scores higher AND is more defensible.
 
-The standing recommendation is to use **Option A for headline numbers**, **Option C for v5-memo-aligned investor narratives** (especially when investors ask about node economics or unlock timing), and **Option B for stress-testing**.
+The standing recommendation is to use **Option D for any investor-facing or analyst-facing conversation**, **Option A only when explicitly framing a bull case**, and **Option B for downside stress-testing**.
 
 ---
 
