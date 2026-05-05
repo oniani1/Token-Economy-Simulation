@@ -28,3 +28,13 @@ v5_results/all_results.json
 v5_results/iter*_all_results.json
 crowdbrain-memo-v5.txt
 crowdbrain-memo-v5_tables.txt
+
+# iter5 transient run logs (regeneratable; data lives in v5_results/iter5_*.json)
+bo_run.log
+phaseI_run.log
+diag_run.log
+report_run.log
+report_final_run.log
+backtest_run.log
+deck_run.log
+chain.log

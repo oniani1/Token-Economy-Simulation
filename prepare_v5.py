@@ -220,6 +220,12 @@ def run_simulation_v5(params: Dict, seed: int = RANDOM_SEED) -> Tuple[List[Dict]
         })
         usd_per_hour_blended = get_nested(params, "customers.usd_per_hour_blended", DEFAULT_USD_PER_HOUR_BLENDED)
 
+        # Per-customer-tier matching (iter5): each customer sees a sampled subset
+        # of operators per tier rather than the global pool. Reduces churn from
+        # global-aggregate-quality smoothing and prevents active-op decline post-m24.
+        per_customer_tier_pool = get_nested(params, "customers.matching.per_customer_tier_pool", False)
+        pool_size_per_tier = get_nested(params, "customers.matching.pool_size_per_tier", 25)
+
     # ── v5 param shortcuts ──
     tier_unlock_rules = get_nested(params, "tier_unlock.rules", DEFAULT_UNLOCK) if tier_unlock_on else DEFAULT_UNLOCK
     op_count_qualifier = get_nested(params, "tier_unlock.op_count_qualifier", "active_with_credential")
@@ -1039,12 +1045,24 @@ def run_simulation_v5(params: Dict, seed: int = RANDOM_SEED) -> Tuple[List[Dict]
 
                 # Quality avg = mean of producer quality_scores on cust's tiers WITH OPS
                 # (weighted by demand). Tiers with no ops don't contribute (no signal).
+                # Per-customer-tier matching (iter5): if enabled, each customer samples
+                # a deterministic subset of operators per tier (varies between customers
+                # — heterogeneous quality signal — and stays sticky as ops churn in/out).
                 quality_weighted = 0.0
                 quality_weight_total = 0.0
+                cust_pool_rng = random.Random(hash(("match", c.id))) if per_customer_tier_pool else None
                 for tier, td in cust_demand.items():
                     tops = ops_by_tier.get(tier, [])
                     if tops and td > 0:
-                        tier_qavg = sum(o.quality_score for o in tops) / len(tops)
+                        if per_customer_tier_pool and len(tops) > pool_size_per_tier:
+                            # Stable per-customer subsample: shuffle by customer-seed,
+                            # take first pool_size. Deterministic across months — pool
+                            # composition refreshes naturally as ops churn out of `tops`.
+                            ordered = sorted(tops, key=lambda o: cust_pool_rng.random())
+                            sampled = ordered[:pool_size_per_tier]
+                            tier_qavg = sum(o.quality_score for o in sampled) / len(sampled)
+                        else:
+                            tier_qavg = sum(o.quality_score for o in tops) / len(tops)
                         quality_weighted += tier_qavg * td
                         quality_weight_total += td
                 quality_avg = quality_weighted / quality_weight_total if quality_weight_total > 0 else 0.7

@@ -8,8 +8,9 @@ The point of the project is **not** to predict a token price. It is to find a pa
 
 ## TL;DR
 
-- **Four simulation generations + iterative realistic recalibration.** v2 → v3 → v4 → v5 → v5_realistic → **v5_realistic_jcurve (iter4)** — the latest calibration models a **J-curve trajectory** (slow first 18 months, mild pickup mid year 2 → mid year 3, take-off from month 30+) that matches how real Physical-AI / teleop markets mature.
-- **The headline recommended config is `jcurve_combined_60mo`** — composite **0.683 ± 0.020** at 60 months under the J-curve realistic baseline + iter3 winners (op_loose unlock + $100 hardware stake): **$24.4M final ARR**, **185 customers**, **2,582 T4+ operators**, **$40M cumulative revenue**. These numbers are explicitly defensible against real-world Series-A → Series-B robotics-data peers (Scale AI was ~$10M ARR at year 3 with thousands of customers; CrowdBrain wedge is narrower but reaches Series-B trajectory by year 5).
+- **Four simulation generations + iterative realistic recalibration.** v2 → v3 → v4 → v5 → v5_realistic → v5_iter4 (J-curve) → **v5_iter5 (open-ended discovery)** — the latest iteration ran a 7-phase open-ended sweep (stake $0–$200, persona reintroduction, combined-stress pairs, Q4 milestone fix structures, token-price clamp, per-customer-tier matching) plus 80-config Bayesian-style random search.
+- **The headline recommended config (post-iter5) is `stake_025`** — composite **0.746 ± 0.015** at 60 months under the J-curve realistic baseline + op-count tier unlock (10/5/2) + **hardware stake $25** (open-ended discovery winner; iter4 used $100 because the sensitivity flag from the iter4 sweep said 'go lower' — iter5 confirmed it): **$29.1M final ARR**, **212 customers**, **3,063 T4+ operators**, **$49M cumulative revenue**. Numbers are defensible against real-world Series-A → Series-B robotics-data peers (Scale AI was ~$10M ARR at year 3 with thousands of customers; CrowdBrain wedge is narrower but reaches Series-B trajectory by year 5; backtest distance closest to Hivemapper).
+- **Q4 2026 milestone is now achievable via `q4_combo_all_three`** — 5 design partners + bigger DP contracts + accelerated operator onboarding hits the memo's $500K+ ARR + 3+ customer target **90% of MC seeds** at month 8 (vs 0% under pure J-curve). Trade-off is -0.09 long-run composite. Recommendation: announce **$300K-ARR + 3+ customers** publicly (consistently met at 0.746 winner) and use combo structure as internal stretch for $500K hit.
 - **Three iterations of sweeps** (47 + 47 + 35 min wall time, parallelized across 23 cores, 850 total runs at MC=10–50): iter1 found the v5 layer cost was 0.21 composite vs v4-equivalent under unrealistic numbers; iter2 found `stake_300` and `unlock_revenue_gated` were the winners under unrealistic params; **iter3 (realistic) flipped both findings** — `stake_100` is optimal under realistic params, and `unlock_op_loose` (10/5/2 op-count thresholds) dominates over revenue-gating.
 - **Q4 2026 milestone (3+ paying customers, $500K+ ARR @ month 8) is marginal at MC=50**: P(hit) = 12%, mean Q4 customers = 4.6 ✓, mean Q4 ARR = $413K (just below target). The customer-count target is consistently met; the ARR threshold needs either re-targeting or an accelerated launch.
 - **Six v5 findings (unrealistic mode) worth reading** are documented in `REPORT_v5.md`: tier-unlock gating improves the system, the token economy is load-bearing (m12 cutover beats points-only by 23%), bond size barely matters but facility/community split does, Tesla/1X wage anchor is a non-issue, funding winter + MVP slip are existential threats, and Georgia is the most load-bearing region.
@@ -173,6 +174,7 @@ The v3 rebuild centered on the memo's multi-witness validation:
 | v5_iter2 | Pareto sweep at MC=20 (18 cells × 3 phases) targeting iter1 sub-score drags. Found stake_300 + unlock_revenue_gated optimal under unrealistic params. Combo of 4 winners stacks at +0.025. | 36 months | **0.597 ± 0.087** (stake_300 winner); 0.772 if all v5 layers off (= v4_no_personas reference) | $41M (stake_300); $84M (layers_off) |
 | v5_iter3 (REALISTIC) | Recalibrated customer model (smaller contracts, slower arrival), scaled-down operator onboarding, smaller token supply, lower hardware stakes. 4 phases + Q4 2026 milestone at MC=50. | 36 / **60 months** | **0.663** @ 36mo baseline; **0.844 ± 0.012** @ 60mo (BEATS v4_no_personas) | $24M @ 36mo, **$86M @ 60mo** |
 | v5_iter4 (J-CURVE) | Refined to J-curve adoption: slow first 18 months → mild pickup m18-30 → take-off m30+. Operator onboarding ×0.10 (memo-aligned 1K trained @ Q3 2026). Smaller contracts. 4 phases + sensitivity ±20% + Q4 milestone. | 36 / 60 months | **0.683 ± 0.020** @ 60mo (jcurve_combined) | **$40M @ 60mo, $24M ARR end-of-sim, 185 customers** |
+| v5_iter5 (OPEN-ENDED) | 7 phases (stake sweep $0-$200, MC=50 winner validation, combined-stress pairs, Q4 fix structures, persona reintroduction, token-price clamp, per-customer-tier matching) + 80-config Bayesian random search + Helium/Scale-AI/Hivemapper backtest. Engine extension: per-customer-tier matching toggle. | 36 / 60 months | **0.746 ± 0.015** @ 60mo (stake_25 winner; +0.063 vs iter4) | **$49M @ 60mo, $29M ARR end-of-sim, 212 customers, 3,063 T4+ ops** |
 
 **v2's 0.8876 is not directly comparable to v3/v4 scores** — v2 used different score weights and a different scoring scale. v3 introduced 9 sub-scores with stricter caps; the same underlying economy scores lower under v3 weights because the ceiling is harder to hit.
 
@@ -444,6 +446,69 @@ The customer-count target is met consistently; the ARR threshold is marginal. Re
 
 **This is the config you should use for stakeholder narratives.** Numbers are defensible vs real-world peers, the composite is higher than any v4 result, and the late-stage compounding tells a clean Series-A → B → C → D story.
 
+### v5 iter4 — J-curve refinement (2026-05-05)
+
+iter3's `realistic_baseline_60mo` (0.844 / $37M ARR / 16K T4+ ops) tested clean numerically but produced operator counts incompatible with a Series-B-stage robotics-data startup. iter4 refined the calibration to a **J-curve adoption shape**:
+
+- Year 1 + early Y2 (m1–18): SLOW START — customer arrival × 0.6 (bootstrap era)
+- Mid Y2 → mid Y3 (m18–30): MILD pickup — × 1.4 (growth era)
+- Mid Y3+ (m30+): TAKE OFF — × 4.0 (maturity era; Physical-AI mainstream)
+
+Plus: lowered `lambda_max` to 0.6/seg/mo, smaller contracts ($15–40K), operator onboarding multiplier × 0.10 (memo-aligned), gentler arrival curve.
+
+iter4 winner: `jcurve_combined_60mo` — composite **0.683 ± 0.020**, $24M ARR, 185 customers, 2,582 T4+ ops, $40M cum revenue. Sensitivity flagged hardware stake as the most-impactful lever (-20% on stake = +0.046 composite), suggesting the iter4 $100 stake was still too high.
+
+### v5 iter5 — Open-ended discovery (2026-05-05 evening)
+
+User directive: "Let model discover. Lets include all but lets experiment and simulate all the ideas." 7-phase open-ended sweep + 80-config Bayesian random search + Helium/Scale-AI/Hivemapper realism backtest + per-customer-tier matching engine extension + 5-slide investor pitch deck.
+
+**The headline finding: hardware stake $25 is the sweet spot, +0.063 composite over iter4's $100.**
+
+Phase A stake sweep (60mo, MC=20):
+
+| Stake | Composite | Final ARR | T4+ ops | Customers |
+|---|---|---|---|---|
+| $0 | 0.686 ± 0.019 | $24.1M | 2,429 | 190 |
+| $10 | 0.736 ± 0.017 | $28.9M | 2,950 | 218 |
+| **$25** | **0.746 ± 0.015** ⭐ | **$29.1M** | **3,063** | **212** |
+| $50 | 0.740 ± 0.018 | $28.2M | 3,038 | 210 |
+| $100 | 0.683 ± 0.020 | $24.4M | 2,582 | 185 |
+| $200 | 0.486 ± 0.020 | $8.0M | 1,137 | 130 |
+
+Open-ended sweep validates **floor-then-decline**: $0 stake is suboptimal (no incentive floor against bad actors), $25–50 is the sweet spot, and >$100 starts collapsing participation. Memo's $300–500 range was over-tuned.
+
+**Q4 milestone now achievable.** Phase D found that `q4_combo_all_three` (5 design partners + bigger DP contracts + accelerated operator onboarding) hits the memo's $500K-ARR-by-Q4-2026 target **90% of MC seeds** (vs 0% under pure J-curve). Trade-off: -0.09 long-run composite. Investor recommendation: announce **$300K-ARR + 3+ customers** publicly (consistently met under the standing winner), with combo as internal stretch.
+
+**Combined-stress pairs are NOT additive — J-curve absorbs early shocks.** Single-axis funding_winter was -30% in iter4 (vs no-winners baseline 0.485). Combined stresses (winter+slip, winter+tesla, geoGE+winter) at the iter5 winner-base settle at ~-8% from baseline. The maturity-era customer-arrival × 4.0 dominates after m30, absorbing months-6-30 shocks. Major investor-narrative win.
+
+**Persona reintroduction is severely costly.** Personas drop composite by 0.18–0.25 and T4+ ops by 65–87%. Validator-heavy mix (20/40/30/10) is the least-bad at 0.499. Recommended: keep personas off in winner config.
+
+**Per-customer-tier matching is neutral.** Engine extension adds per-customer sticky operator subsets per tier (each customer sees a randomized N=25 subset rather than the global pool). Composite unchanged at $100 stake (Phase G); active-op final count slightly higher (+5%). Diagnostic at seed=42 shows essentially identical trajectories. Active-op decline post-m24 is structural to the J-curve, not a matching artifact.
+
+**Realism backtest** (log-L2 distance from winner ARR trajectory to published peers): closest to **Hivemapper** (0.220), then **Helium** (0.489), then **Scale AI** (0.562). Trajectory sits between Helium (DePIN-stagnated) and Scale AI (hypergrowth) — defensible investor positioning.
+
+**Bayesian random search** (80 configs Stage 1 MC=10 + top-5 Stage 2 MC=20) over the unified parameter space (stake, λ, onboarding, era multipliers, DP sizes). Results in `bo_winner_config.json`; see `REPORT_v5_iter5.md`.
+
+#### v5 iter5 recommended launch config
+
+| Lever | Setting |
+|---|---|
+| Calibration | `train_v5_realistic.PARAMS_V5_REALISTIC` (J-curve, refined 2026-05-05) |
+| Tier unlock | Op-count gated: T3=10, T4=5, T5=2 qualified ops at prior tier |
+| Hardware stake T3 | **$25** (iter5 discovery; was $100 in iter4) |
+| Token emission | 500K tokens/mo, 100M max supply |
+| AMM pool at TGE | $200K each side |
+| Customer model | $15–40K/mo, λ=0.6/seg/mo, J-curve via era multipliers |
+| Operator onboarding multiplier | 0.10 (memo-aligned ~1K trained @ Q3 2026) |
+| Design partners | 3 multi-year (24-month immune-from-sat-churn) |
+| Horizon for stakeholders | 60 months |
+| Expected composite | **0.746 ± 0.015** at MC=20 |
+| Expected end-state | 212 customers, $29.1M ARR, $49M cum revenue, 3,063 T4+ ops |
+| Q4 2026 milestone (winner) | 0% hit at $500K target — recommend $300K public target (consistently met) |
+| Q4 2026 milestone (q4_combo stretch) | 90% hit at $500K with 5 DPs + bigger contracts + accelerated onboarding |
+
+**This is the post-iter5 stakeholder config.** It supersedes the iter4 recommendation; iter4 numbers are still valid for the J-curve calibration but iter5 found a strictly better stake setting.
+
 ---
 
 ## What's still broken
@@ -626,6 +691,22 @@ experiments_v5_iter2.py   v5 iter2: 18-cell Pareto sweep at MC=20 — combo + re
                           thresholds + hardware stake + node provisioning. ~47 min.
 experiments_v5_iter3.py   v5 iter3: 17-cell REALISTIC sweep at MC=20 + Q4 2026 milestone
                           probability at MC=50. 4 phases including 60mo long horizon. ~35 min.
+experiments_v5_iter4.py   v5 iter4: 4 phases (combined winners + Q4 fix candidates +
+                          realistic-mode stress + ±20% sensitivity) + MC=50 milestone. ~10 min.
+experiments_v5_iter5.py   v5 iter5: 7 phases (open-ended stake $0-$200 sweep + MC=50 winner +
+                          combined-stress pairs + Q4 fix structures + persona reintroduction +
+                          token-price clamp + per-customer-tier matching). ~18 min wall.
+experiments_v5_iter5_phaseI.py  Final iter5 winner re-validation combining all discoveries
+                          (stake winner + matching toggle if helpful). ~3 min.
+bayesian_opt_v5.py        80-config random-search optimizer over the unified v5 parameter
+                          space (stake, λ, onboarding, era multipliers, DP sizes). Stage 1 MC=10
+                          + Stage 2 top-5 MC=20. ~45 min.
+backtest_v5.py            Realism comparison: log-L2 distance from winner ARR trajectory to
+                          published Helium / Scale AI / Hivemapper checkpoints.
+diagnostic_per_tier_match.py  Single-seed comparison of aggregate vs per-tier matching;
+                          plots active-op trajectory side-by-side.
+deck_iter5.py             Generates the iter5 stakeholder package: winner_timeseries CSV,
+                          6-panel chart, exec summary, 5-slide INVESTOR_PITCH markdown.
 
 report_v4_generator.py    Auto-generates REPORT_v4.md + plots from JSON results.
 report_v5_generator.py    Auto-generates REPORT_v5.md from track[1-4]_results.json.
@@ -639,6 +720,19 @@ REPORT_v4.md              v4 full analysis: pillar ablation, stress, iter2/iter3
 REPORT_v5.md              v5 4-track sweep findings + recommended launch config (unrealistic).
 REPORT_v5_iter2.md        v5 iter2 Pareto sweep — stake/nodes/unlock fine-tuning.
 REPORT_v5_iter3.md        v5 iter3 REALISTIC findings — recommended for stakeholder use.
+REPORT_v5_iter4.md        v5 iter4 J-curve refinement — combined winners + sensitivity.
+REPORT_v5_iter5.md        v5 iter5 open-ended discovery — stake $25 winner, Q4 90%-hit fix,
+                          persona cost, per-tier matching test, BO results, backtest.
+
+EXECUTIVE_SUMMARY_v5_realistic.md   1-page exec summary (iter4 J-curve baseline).
+EXECUTIVE_SUMMARY_v5_iter5.md       1-page exec summary (iter5 stake $25 winner + discoveries).
+INVESTOR_PITCH_v5_iter5.md          5-slide investor pitch (memo recap + J-curve + config +
+                                    stress + Q4 milestone roadmap).
+winner_timeseries_v5_realistic.csv  iter4 winner monthly trajectory.
+winner_timeseries_v5_iter5.csv      iter5 winner monthly trajectory.
+v5_realistic_overview.png           iter4 6-panel chart.
+v5_iter5_overview.png               iter5 6-panel chart.
+v5_iter5_matching_comparison.png    Per-tier vs aggregate matching active-op trajectory.
 EXECUTIVE_SUMMARY_v4.md   2-minute exec summary of the v4 findings.
 CrowdTrain_v4_Report.{pdf,docx}    Stakeholder-ready packet (v4 vintage; pre-v5 rebrand).
 

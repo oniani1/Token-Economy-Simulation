@@ -1,0 +1,974 @@
+{
+  "matching_off": [
+    {
+      "month": 1,
+      "active_operators": 26,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 0,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 2,
+      "active_operators": 71,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 0,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 3,
+      "active_operators": 152,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 2986,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 4,
+      "active_operators": 295,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 4906,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 5,
+      "active_operators": 541,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 10633,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 6,
+      "active_operators": 838,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 10638,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 7,
+      "active_operators": 1175,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 15329,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 8,
+      "active_operators": 1574,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 17064,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 9,
+      "active_operators": 1954,
+      "operators_t4_plus": 3,
+      "monthly_revenue": 17053,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 10,
+      "active_operators": 2252,
+      "operators_t4_plus": 8,
+      "monthly_revenue": 23437,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 11,
+      "active_operators": 2512,
+      "operators_t4_plus": 15,
+      "monthly_revenue": 31504,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 12,
+      "active_operators": 2686,
+      "operators_t4_plus": 24,
+      "monthly_revenue": 31536,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.648
+    },
+    {
+      "month": 13,
+      "active_operators": 2852,
+      "operators_t4_plus": 45,
+      "monthly_revenue": 31549,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.648
+    },
+    {
+      "month": 14,
+      "active_operators": 2990,
+      "operators_t4_plus": 65,
+      "monthly_revenue": 33670,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.657
+    },
+    {
+      "month": 15,
+      "active_operators": 3108,
+      "operators_t4_plus": 85,
+      "monthly_revenue": 35599,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.681
+    },
+    {
+      "month": 16,
+      "active_operators": 3234,
+      "operators_t4_plus": 111,
+      "monthly_revenue": 54584,
+      "customer_count_active": 4,
+      "customer_avg_satisfaction": 0.74
+    },
+    {
+      "month": 17,
+      "active_operators": 3358,
+      "operators_t4_plus": 145,
+      "monthly_revenue": 56244,
+      "customer_count_active": 4,
+      "customer_avg_satisfaction": 0.734
+    },
+    {
+      "month": 18,
+      "active_operators": 3454,
+      "operators_t4_plus": 185,
+      "monthly_revenue": 56331,
+      "customer_count_active": 4,
+      "customer_avg_satisfaction": 0.758
+    },
+    {
+      "month": 19,
+      "active_operators": 3604,
+      "operators_t4_plus": 255,
+      "monthly_revenue": 82756,
+      "customer_count_active": 6,
+      "customer_avg_satisfaction": 0.788
+    },
+    {
+      "month": 20,
+      "active_operators": 3613,
+      "operators_t4_plus": 363,
+      "monthly_revenue": 86618,
+      "customer_count_active": 6,
+      "customer_avg_satisfaction": 0.817
+    },
+    {
+      "month": 21,
+      "active_operators": 3652,
+      "operators_t4_plus": 485,
+      "monthly_revenue": 100184,
+      "customer_count_active": 6,
+      "customer_avg_satisfaction": 0.857
+    },
+    {
+      "month": 22,
+      "active_operators": 3687,
+      "operators_t4_plus": 585,
+      "monthly_revenue": 107570,
+      "customer_count_active": 7,
+      "customer_avg_satisfaction": 0.867
+    },
+    {
+      "month": 23,
+      "active_operators": 3783,
+      "operators_t4_plus": 697,
+      "monthly_revenue": 121936,
+      "customer_count_active": 10,
+      "customer_avg_satisfaction": 0.866
+    },
+    {
+      "month": 24,
+      "active_operators": 3890,
+      "operators_t4_plus": 846,
+      "monthly_revenue": 148833,
+      "customer_count_active": 12,
+      "customer_avg_satisfaction": 0.887
+    },
+    {
+      "month": 25,
+      "active_operators": 3967,
+      "operators_t4_plus": 989,
+      "monthly_revenue": 221495,
+      "customer_count_active": 16,
+      "customer_avg_satisfaction": 0.904
+    },
+    {
+      "month": 26,
+      "active_operators": 4054,
+      "operators_t4_plus": 1123,
+      "monthly_revenue": 241235,
+      "customer_count_active": 17,
+      "customer_avg_satisfaction": 0.915
+    },
+    {
+      "month": 27,
+      "active_operators": 4110,
+      "operators_t4_plus": 1256,
+      "monthly_revenue": 343515,
+      "customer_count_active": 19,
+      "customer_avg_satisfaction": 0.792
+    },
+    {
+      "month": 28,
+      "active_operators": 4094,
+      "operators_t4_plus": 1387,
+      "monthly_revenue": 350904,
+      "customer_count_active": 20,
+      "customer_avg_satisfaction": 0.721
+    },
+    {
+      "month": 29,
+      "active_operators": 4081,
+      "operators_t4_plus": 1497,
+      "monthly_revenue": 393065,
+      "customer_count_active": 23,
+      "customer_avg_satisfaction": 0.679
+    },
+    {
+      "month": 30,
+      "active_operators": 4055,
+      "operators_t4_plus": 1585,
+      "monthly_revenue": 403110,
+      "customer_count_active": 24,
+      "customer_avg_satisfaction": 0.651
+    },
+    {
+      "month": 31,
+      "active_operators": 4025,
+      "operators_t4_plus": 1682,
+      "monthly_revenue": 439274,
+      "customer_count_active": 29,
+      "customer_avg_satisfaction": 0.594
+    },
+    {
+      "month": 32,
+      "active_operators": 4013,
+      "operators_t4_plus": 1785,
+      "monthly_revenue": 452806,
+      "customer_count_active": 31,
+      "customer_avg_satisfaction": 0.575
+    },
+    {
+      "month": 33,
+      "active_operators": 4019,
+      "operators_t4_plus": 1872,
+      "monthly_revenue": 600769,
+      "customer_count_active": 42,
+      "customer_avg_satisfaction": 0.545
+    },
+    {
+      "month": 34,
+      "active_operators": 4053,
+      "operators_t4_plus": 1971,
+      "monthly_revenue": 674401,
+      "customer_count_active": 51,
+      "customer_avg_satisfaction": 0.538
+    },
+    {
+      "month": 35,
+      "active_operators": 4072,
+      "operators_t4_plus": 2047,
+      "monthly_revenue": 743331,
+      "customer_count_active": 58,
+      "customer_avg_satisfaction": 0.527
+    },
+    {
+      "month": 36,
+      "active_operators": 4108,
+      "operators_t4_plus": 2124,
+      "monthly_revenue": 861944,
+      "customer_count_active": 69,
+      "customer_avg_satisfaction": 0.527
+    },
+    {
+      "month": 37,
+      "active_operators": 4148,
+      "operators_t4_plus": 2217,
+      "monthly_revenue": 895139,
+      "customer_count_active": 70,
+      "customer_avg_satisfaction": 0.543
+    },
+    {
+      "month": 38,
+      "active_operators": 4157,
+      "operators_t4_plus": 2273,
+      "monthly_revenue": 1019473,
+      "customer_count_active": 81,
+      "customer_avg_satisfaction": 0.541
+    },
+    {
+      "month": 39,
+      "active_operators": 4188,
+      "operators_t4_plus": 2347,
+      "monthly_revenue": 1057786,
+      "customer_count_active": 86,
+      "customer_avg_satisfaction": 0.546
+    },
+    {
+      "month": 40,
+      "active_operators": 4197,
+      "operators_t4_plus": 2411,
+      "monthly_revenue": 1127814,
+      "customer_count_active": 94,
+      "customer_avg_satisfaction": 0.541
+    },
+    {
+      "month": 41,
+      "active_operators": 4199,
+      "operators_t4_plus": 2475,
+      "monthly_revenue": 1184051,
+      "customer_count_active": 102,
+      "customer_avg_satisfaction": 0.538
+    },
+    {
+      "month": 42,
+      "active_operators": 4197,
+      "operators_t4_plus": 2532,
+      "monthly_revenue": 1202138,
+      "customer_count_active": 104,
+      "customer_avg_satisfaction": 0.542
+    },
+    {
+      "month": 43,
+      "active_operators": 4197,
+      "operators_t4_plus": 2589,
+      "monthly_revenue": 1263746,
+      "customer_count_active": 112,
+      "customer_avg_satisfaction": 0.542
+    },
+    {
+      "month": 44,
+      "active_operators": 4193,
+      "operators_t4_plus": 2643,
+      "monthly_revenue": 1323864,
+      "customer_count_active": 117,
+      "customer_avg_satisfaction": 0.54
+    },
+    {
+      "month": 45,
+      "active_operators": 4186,
+      "operators_t4_plus": 2676,
+      "monthly_revenue": 1411171,
+      "customer_count_active": 127,
+      "customer_avg_satisfaction": 0.538
+    },
+    {
+      "month": 46,
+      "active_operators": 4171,
+      "operators_t4_plus": 2702,
+      "monthly_revenue": 1453976,
+      "customer_count_active": 134,
+      "customer_avg_satisfaction": 0.536
+    },
+    {
+      "month": 47,
+      "active_operators": 4151,
+      "operators_t4_plus": 2739,
+      "monthly_revenue": 1530960,
+      "customer_count_active": 143,
+      "customer_avg_satisfaction": 0.531
+    },
+    {
+      "month": 48,
+      "active_operators": 4115,
+      "operators_t4_plus": 2752,
+      "monthly_revenue": 1594164,
+      "customer_count_active": 147,
+      "customer_avg_satisfaction": 0.527
+    },
+    {
+      "month": 49,
+      "active_operators": 4083,
+      "operators_t4_plus": 2778,
+      "monthly_revenue": 1671732,
+      "customer_count_active": 158,
+      "customer_avg_satisfaction": 0.522
+    },
+    {
+      "month": 50,
+      "active_operators": 4056,
+      "operators_t4_plus": 2819,
+      "monthly_revenue": 1786819,
+      "customer_count_active": 166,
+      "customer_avg_satisfaction": 0.52
+    },
+    {
+      "month": 51,
+      "active_operators": 4022,
+      "operators_t4_plus": 2826,
+      "monthly_revenue": 1787420,
+      "customer_count_active": 170,
+      "customer_avg_satisfaction": 0.517
+    },
+    {
+      "month": 52,
+      "active_operators": 3977,
+      "operators_t4_plus": 2832,
+      "monthly_revenue": 1858900,
+      "customer_count_active": 178,
+      "customer_avg_satisfaction": 0.519
+    },
+    {
+      "month": 53,
+      "active_operators": 3944,
+      "operators_t4_plus": 2844,
+      "monthly_revenue": 1937224,
+      "customer_count_active": 170,
+      "customer_avg_satisfaction": 0.524
+    },
+    {
+      "month": 54,
+      "active_operators": 3907,
+      "operators_t4_plus": 2838,
+      "monthly_revenue": 1937683,
+      "customer_count_active": 177,
+      "customer_avg_satisfaction": 0.527
+    },
+    {
+      "month": 55,
+      "active_operators": 3852,
+      "operators_t4_plus": 2837,
+      "monthly_revenue": 2054967,
+      "customer_count_active": 189,
+      "customer_avg_satisfaction": 0.521
+    },
+    {
+      "month": 56,
+      "active_operators": 3796,
+      "operators_t4_plus": 2832,
+      "monthly_revenue": 2162908,
+      "customer_count_active": 200,
+      "customer_avg_satisfaction": 0.517
+    },
+    {
+      "month": 57,
+      "active_operators": 3736,
+      "operators_t4_plus": 2823,
+      "monthly_revenue": 2232517,
+      "customer_count_active": 202,
+      "customer_avg_satisfaction": 0.519
+    },
+    {
+      "month": 58,
+      "active_operators": 3683,
+      "operators_t4_plus": 2807,
+      "monthly_revenue": 2288151,
+      "customer_count_active": 212,
+      "customer_avg_satisfaction": 0.515
+    },
+    {
+      "month": 59,
+      "active_operators": 3646,
+      "operators_t4_plus": 2812,
+      "monthly_revenue": 2341996,
+      "customer_count_active": 215,
+      "customer_avg_satisfaction": 0.518
+    },
+    {
+      "month": 60,
+      "active_operators": 3602,
+      "operators_t4_plus": 2813,
+      "monthly_revenue": 2405970,
+      "customer_count_active": 217,
+      "customer_avg_satisfaction": 0.518
+    }
+  ],
+  "matching_on": [
+    {
+      "month": 1,
+      "active_operators": 26,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 0,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 2,
+      "active_operators": 71,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 0,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 3,
+      "active_operators": 152,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 2986,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 4,
+      "active_operators": 295,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 4906,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 5,
+      "active_operators": 541,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 10633,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 6,
+      "active_operators": 838,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 10638,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 7,
+      "active_operators": 1175,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 15329,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 8,
+      "active_operators": 1574,
+      "operators_t4_plus": 0,
+      "monthly_revenue": 17064,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 9,
+      "active_operators": 1954,
+      "operators_t4_plus": 3,
+      "monthly_revenue": 17053,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 10,
+      "active_operators": 2252,
+      "operators_t4_plus": 8,
+      "monthly_revenue": 23437,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 11,
+      "active_operators": 2512,
+      "operators_t4_plus": 15,
+      "monthly_revenue": 31504,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.0
+    },
+    {
+      "month": 12,
+      "active_operators": 2686,
+      "operators_t4_plus": 24,
+      "monthly_revenue": 31536,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.648
+    },
+    {
+      "month": 13,
+      "active_operators": 2852,
+      "operators_t4_plus": 45,
+      "monthly_revenue": 31549,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.648
+    },
+    {
+      "month": 14,
+      "active_operators": 2990,
+      "operators_t4_plus": 65,
+      "monthly_revenue": 33670,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.657
+    },
+    {
+      "month": 15,
+      "active_operators": 3108,
+      "operators_t4_plus": 85,
+      "monthly_revenue": 35599,
+      "customer_count_active": 3,
+      "customer_avg_satisfaction": 0.68
+    },
+    {
+      "month": 16,
+      "active_operators": 3234,
+      "operators_t4_plus": 111,
+      "monthly_revenue": 54584,
+      "customer_count_active": 4,
+      "customer_avg_satisfaction": 0.74
+    },
+    {
+      "month": 17,
+      "active_operators": 3358,
+      "operators_t4_plus": 145,
+      "monthly_revenue": 56244,
+      "customer_count_active": 4,
+      "customer_avg_satisfaction": 0.734
+    },
+    {
+      "month": 18,
+      "active_operators": 3454,
+      "operators_t4_plus": 185,
+      "monthly_revenue": 56331,
+      "customer_count_active": 4,
+      "customer_avg_satisfaction": 0.758
+    },
+    {
+      "month": 19,
+      "active_operators": 3604,
+      "operators_t4_plus": 255,
+      "monthly_revenue": 82756,
+      "customer_count_active": 6,
+      "customer_avg_satisfaction": 0.789
+    },
+    {
+      "month": 20,
+      "active_operators": 3613,
+      "operators_t4_plus": 363,
+      "monthly_revenue": 86618,
+      "customer_count_active": 6,
+      "customer_avg_satisfaction": 0.817
+    },
+    {
+      "month": 21,
+      "active_operators": 3652,
+      "operators_t4_plus": 485,
+      "monthly_revenue": 100184,
+      "customer_count_active": 6,
+      "customer_avg_satisfaction": 0.855
+    },
+    {
+      "month": 22,
+      "active_operators": 3687,
+      "operators_t4_plus": 585,
+      "monthly_revenue": 107570,
+      "customer_count_active": 7,
+      "customer_avg_satisfaction": 0.865
+    },
+    {
+      "month": 23,
+      "active_operators": 3783,
+      "operators_t4_plus": 697,
+      "monthly_revenue": 121936,
+      "customer_count_active": 10,
+      "customer_avg_satisfaction": 0.866
+    },
+    {
+      "month": 24,
+      "active_operators": 3890,
+      "operators_t4_plus": 846,
+      "monthly_revenue": 148833,
+      "customer_count_active": 12,
+      "customer_avg_satisfaction": 0.887
+    },
+    {
+      "month": 25,
+      "active_operators": 3967,
+      "operators_t4_plus": 989,
+      "monthly_revenue": 221495,
+      "customer_count_active": 16,
+      "customer_avg_satisfaction": 0.903
+    },
+    {
+      "month": 26,
+      "active_operators": 4054,
+      "operators_t4_plus": 1123,
+      "monthly_revenue": 241235,
+      "customer_count_active": 17,
+      "customer_avg_satisfaction": 0.913
+    },
+    {
+      "month": 27,
+      "active_operators": 4110,
+      "operators_t4_plus": 1256,
+      "monthly_revenue": 343515,
+      "customer_count_active": 19,
+      "customer_avg_satisfaction": 0.79
+    },
+    {
+      "month": 28,
+      "active_operators": 4094,
+      "operators_t4_plus": 1387,
+      "monthly_revenue": 350904,
+      "customer_count_active": 20,
+      "customer_avg_satisfaction": 0.719
+    },
+    {
+      "month": 29,
+      "active_operators": 4081,
+      "operators_t4_plus": 1497,
+      "monthly_revenue": 393065,
+      "customer_count_active": 23,
+      "customer_avg_satisfaction": 0.679
+    },
+    {
+      "month": 30,
+      "active_operators": 4055,
+      "operators_t4_plus": 1585,
+      "monthly_revenue": 403110,
+      "customer_count_active": 24,
+      "customer_avg_satisfaction": 0.65
+    },
+    {
+      "month": 31,
+      "active_operators": 4025,
+      "operators_t4_plus": 1682,
+      "monthly_revenue": 439274,
+      "customer_count_active": 29,
+      "customer_avg_satisfaction": 0.595
+    },
+    {
+      "month": 32,
+      "active_operators": 4013,
+      "operators_t4_plus": 1785,
+      "monthly_revenue": 452806,
+      "customer_count_active": 31,
+      "customer_avg_satisfaction": 0.576
+    },
+    {
+      "month": 33,
+      "active_operators": 4019,
+      "operators_t4_plus": 1872,
+      "monthly_revenue": 600769,
+      "customer_count_active": 42,
+      "customer_avg_satisfaction": 0.545
+    },
+    {
+      "month": 34,
+      "active_operators": 4053,
+      "operators_t4_plus": 1971,
+      "monthly_revenue": 674401,
+      "customer_count_active": 51,
+      "customer_avg_satisfaction": 0.539
+    },
+    {
+      "month": 35,
+      "active_operators": 4072,
+      "operators_t4_plus": 2047,
+      "monthly_revenue": 743331,
+      "customer_count_active": 58,
+      "customer_avg_satisfaction": 0.527
+    },
+    {
+      "month": 36,
+      "active_operators": 4108,
+      "operators_t4_plus": 2124,
+      "monthly_revenue": 861944,
+      "customer_count_active": 68,
+      "customer_avg_satisfaction": 0.53
+    },
+    {
+      "month": 37,
+      "active_operators": 4145,
+      "operators_t4_plus": 2184,
+      "monthly_revenue": 890216,
+      "customer_count_active": 70,
+      "customer_avg_satisfaction": 0.543
+    },
+    {
+      "month": 38,
+      "active_operators": 4170,
+      "operators_t4_plus": 2283,
+      "monthly_revenue": 938027,
+      "customer_count_active": 77,
+      "customer_avg_satisfaction": 0.544
+    },
+    {
+      "month": 39,
+      "active_operators": 4198,
+      "operators_t4_plus": 2345,
+      "monthly_revenue": 1009047,
+      "customer_count_active": 81,
+      "customer_avg_satisfaction": 0.548
+    },
+    {
+      "month": 40,
+      "active_operators": 4216,
+      "operators_t4_plus": 2401,
+      "monthly_revenue": 1062832,
+      "customer_count_active": 87,
+      "customer_avg_satisfaction": 0.543
+    },
+    {
+      "month": 41,
+      "active_operators": 4236,
+      "operators_t4_plus": 2450,
+      "monthly_revenue": 1125265,
+      "customer_count_active": 97,
+      "customer_avg_satisfaction": 0.541
+    },
+    {
+      "month": 42,
+      "active_operators": 4263,
+      "operators_t4_plus": 2507,
+      "monthly_revenue": 1221589,
+      "customer_count_active": 109,
+      "customer_avg_satisfaction": 0.542
+    },
+    {
+      "month": 43,
+      "active_operators": 4284,
+      "operators_t4_plus": 2558,
+      "monthly_revenue": 1289668,
+      "customer_count_active": 122,
+      "customer_avg_satisfaction": 0.541
+    },
+    {
+      "month": 44,
+      "active_operators": 4278,
+      "operators_t4_plus": 2603,
+      "monthly_revenue": 1339011,
+      "customer_count_active": 131,
+      "customer_avg_satisfaction": 0.539
+    },
+    {
+      "month": 45,
+      "active_operators": 4266,
+      "operators_t4_plus": 2641,
+      "monthly_revenue": 1499844,
+      "customer_count_active": 143,
+      "customer_avg_satisfaction": 0.536
+    },
+    {
+      "month": 46,
+      "active_operators": 4239,
+      "operators_t4_plus": 2672,
+      "monthly_revenue": 1675495,
+      "customer_count_active": 156,
+      "customer_avg_satisfaction": 0.532
+    },
+    {
+      "month": 47,
+      "active_operators": 4209,
+      "operators_t4_plus": 2702,
+      "monthly_revenue": 1803349,
+      "customer_count_active": 171,
+      "customer_avg_satisfaction": 0.525
+    },
+    {
+      "month": 48,
+      "active_operators": 4181,
+      "operators_t4_plus": 2731,
+      "monthly_revenue": 1828492,
+      "customer_count_active": 173,
+      "customer_avg_satisfaction": 0.52
+    },
+    {
+      "month": 49,
+      "active_operators": 4149,
+      "operators_t4_plus": 2763,
+      "monthly_revenue": 1898782,
+      "customer_count_active": 180,
+      "customer_avg_satisfaction": 0.513
+    },
+    {
+      "month": 50,
+      "active_operators": 4099,
+      "operators_t4_plus": 2781,
+      "monthly_revenue": 1980012,
+      "customer_count_active": 185,
+      "customer_avg_satisfaction": 0.515
+    },
+    {
+      "month": 51,
+      "active_operators": 4066,
+      "operators_t4_plus": 2800,
+      "monthly_revenue": 1989122,
+      "customer_count_active": 178,
+      "customer_avg_satisfaction": 0.517
+    },
+    {
+      "month": 52,
+      "active_operators": 4014,
+      "operators_t4_plus": 2792,
+      "monthly_revenue": 2016418,
+      "customer_count_active": 177,
+      "customer_avg_satisfaction": 0.523
+    },
+    {
+      "month": 53,
+      "active_operators": 3961,
+      "operators_t4_plus": 2786,
+      "monthly_revenue": 2039370,
+      "customer_count_active": 187,
+      "customer_avg_satisfaction": 0.518
+    },
+    {
+      "month": 54,
+      "active_operators": 3915,
+      "operators_t4_plus": 2802,
+      "monthly_revenue": 2133291,
+      "customer_count_active": 196,
+      "customer_avg_satisfaction": 0.512
+    },
+    {
+      "month": 55,
+      "active_operators": 3867,
+      "operators_t4_plus": 2804,
+      "monthly_revenue": 2234458,
+      "customer_count_active": 203,
+      "customer_avg_satisfaction": 0.508
+    },
+    {
+      "month": 56,
+      "active_operators": 3821,
+      "operators_t4_plus": 2825,
+      "monthly_revenue": 2258606,
+      "customer_count_active": 205,
+      "customer_avg_satisfaction": 0.51
+    },
+    {
+      "month": 57,
+      "active_operators": 3782,
+      "operators_t4_plus": 2819,
+      "monthly_revenue": 2257999,
+      "customer_count_active": 202,
+      "customer_avg_satisfaction": 0.514
+    },
+    {
+      "month": 58,
+      "active_operators": 3730,
+      "operators_t4_plus": 2828,
+      "monthly_revenue": 2348904,
+      "customer_count_active": 215,
+      "customer_avg_satisfaction": 0.511
+    },
+    {
+      "month": 59,
+      "active_operators": 3686,
+      "operators_t4_plus": 2831,
+      "monthly_revenue": 2398382,
+      "customer_count_active": 217,
+      "customer_avg_satisfaction": 0.507
+    },
+    {
+      "month": 60,
+      "active_operators": 3637,
+      "operators_t4_plus": 2824,
+      "monthly_revenue": 2404596,
+      "customer_count_active": 213,
+      "customer_avg_satisfaction": 0.509
+    }
+  ],
+  "summary": {
+    "off_peak_active_ops": 4199,
+    "off_final_active_ops": 3602,
+    "on_peak_active_ops": 4284,
+    "on_final_active_ops": 3637,
+    "off_peak_to_final_decline_pct": 14.217670874017625,
+    "on_peak_to_final_decline_pct": 15.102707749766573
+  }
+}

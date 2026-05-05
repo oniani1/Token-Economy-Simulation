@@ -1,0 +1,36 @@
+{
+  "winner_arr_by_year": {
+    "1": 378432.0,
+    "2": 1785996.0,
+    "3": 10343328.0,
+    "4": 19129968.0,
+    "5": 28871640.0
+  },
+  "reference_arr": {
+    "Scale AI": {
+      "1": 1000000,
+      "2": 5000000,
+      "3": 10000000,
+      "4": 60000000,
+      "5": 250000000
+    },
+    "Helium": {
+      "1": 100000,
+      "2": 500000,
+      "3": 2000000,
+      "4": 14000000,
+      "5": 12000000
+    },
+    "Hivemapper": {
+      "1": 200000,
+      "2": 3000000
+    }
+  },
+  "realism_distance": {
+    "Scale AI": 0.5483603214317073,
+    "Helium": 0.512408821863295,
+    "Hivemapper": 0.2524272771282867
+  },
+  "closest_peer": "Hivemapper",
+  "interpretation": "Distance < 0.5 = within order-of-magnitude of peer; 0.5-1.0 = same shape, different scale; >1.0 = qualitatively different trajectory."
+}
