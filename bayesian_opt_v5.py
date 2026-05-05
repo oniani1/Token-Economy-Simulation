@@ -126,7 +126,7 @@ def _aggregate(results: List[Dict]) -> Dict:
 def evaluate_configs(configs: List[Dict], mc: int, label: str) -> List[Dict]:
     """Run each config × MC seeds in parallel. Returns list of {cfg, agg} dicts."""
     print(f"\n{'='*78}")
-    print(f"BO {label}: {len(configs)} configs × MC={mc}  workers={N_WORKERS}")
+    print(f"BO {label}: {len(configs)} configs x MC={mc}  workers={N_WORKERS}")
     print(f"{'='*78}\n")
 
     tasks = []
@@ -179,32 +179,41 @@ def main():
     # Sort by composite score
     stage1.sort(key=lambda r: r["agg"].get("score_mean", 0), reverse=True)
 
-    print("\nTop 10 from Stage 1:")
-    for r in stage1[:10]:
-        c = r["config"]
-        print(f"  cfg{r['cfg_idx']:>3d} score={r['agg'].get('score_mean', 0):.4f}  "
-              f"stake=${c['hardware_stake_t3']:>3d} λ={c['lambda_max_per_segment']:.2f} "
-              f"onb={c['onboarding_multiplier']:.2f} mat_mult={c['era_maturity_mult']:.1f} "
-              f"grow_mo={c['era_growth_threshold_mo']:>2d} dp_mult={c['dp_size_multiplier']:.2f}")
-
+    # Save BEFORE printing - print failures (encoding etc) won't lose data.
     with open(os.path.join(OUT_DIR, "bo_stage1_results.json"), "w") as f:
         json.dump(stage1, f, indent=2)
+
+    try:
+        print("\nTop 10 from Stage 1:")
+        for r in stage1[:10]:
+            c = r["config"]
+            print(f"  cfg{r['cfg_idx']:>3d} score={r['agg'].get('score_mean', 0):.4f}  "
+                  f"stake=${c['hardware_stake_t3']:>3d} lambda={c['lambda_max_per_segment']:.2f} "
+                  f"onb={c['onboarding_multiplier']:.2f} mat_mult={c['era_maturity_mult']:.1f} "
+                  f"grow_mo={c['era_growth_threshold_mo']:>2d} dp_mult={c['dp_size_multiplier']:.2f}")
+    except (UnicodeEncodeError, Exception) as e:
+        print(f"  (skipped pretty-print due to {type(e).__name__})")
 
     # Stage 2: top 5 at MC=20
     top5_configs = [r["config"] for r in stage1[:5]]
     stage2 = evaluate_configs(top5_configs, mc=20, label="Stage 2 (top-5 refinement MC=20)")
 
-    print("\nStage 2 final ranking:")
     stage2.sort(key=lambda r: r["agg"].get("score_mean", 0), reverse=True)
-    for r in stage2:
-        c = r["config"]
-        print(f"  score={r['agg'].get('score_mean', 0):.4f} ± {r['agg'].get('score_std', 0):.4f} "
-              f"ARR=${r['agg'].get('realism_final_arr_usd_mean', 0)/1e6:.1f}M "
-              f"stake=${c['hardware_stake_t3']:>3d} λ={c['lambda_max_per_segment']:.2f} "
-              f"onb={c['onboarding_multiplier']:.2f}")
 
+    # Save BEFORE printing.
     with open(os.path.join(OUT_DIR, "bo_stage2_top5.json"), "w") as f:
         json.dump(stage2, f, indent=2)
+
+    try:
+        print("\nStage 2 final ranking:")
+        for r in stage2:
+            c = r["config"]
+            print(f"  score={r['agg'].get('score_mean', 0):.4f} +- {r['agg'].get('score_std', 0):.4f} "
+                  f"ARR=${r['agg'].get('realism_final_arr_usd_mean', 0)/1e6:.1f}M "
+                  f"stake=${c['hardware_stake_t3']:>3d} lambda={c['lambda_max_per_segment']:.2f} "
+                  f"onb={c['onboarding_multiplier']:.2f}")
+    except (UnicodeEncodeError, Exception) as e:
+        print(f"  (skipped pretty-print due to {type(e).__name__})")
 
     if stage2:
         winner = stage2[0]
@@ -213,7 +222,7 @@ def main():
 
     elapsed = time.time() - overall_start
     print(f"\n{'='*78}")
-    print(f"BO complete — total wall time {elapsed/60:.1f} min")
+    print(f"BO complete - total wall time {elapsed/60:.1f} min")
     print(f"{'='*78}")
 
 

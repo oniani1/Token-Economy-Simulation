@@ -38,3 +38,4 @@ report_final_run.log
 backtest_run.log
 deck_run.log
 chain.log
+*_recovery.log

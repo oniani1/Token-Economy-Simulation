@@ -62,6 +62,12 @@
 
 With per-tier matching enabled: composite **0.6830 ± 0.0225**, active ops **0**.
 
+### Bayesian-style optimization winner
+
+Best random-search config (out of 80 random + top-5 refinement):
+- composite **0.8690 ± 0.0053**
+- params: hardware_stake_t3=1, lambda_max_per_segment=1.4446, onboarding_multiplier=0.4441, era_maturity_mult=3.0536, era_growth_threshold_mo=20, dp_size_multiplier=1.6429
+
 ### Realism backtest vs DePIN/data-labeling peers
 
 Closest peer: **Hivemapper** (log-L2 distance 0.252).

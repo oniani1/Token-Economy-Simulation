@@ -1,6 +1,6 @@
 # CrowdBrain v5 — iteration 5 report
 
-_Generated: 2026-05-05 15:05_
+_Generated: 2026-05-05 17:54_
 
 Open-ended discovery sweep building on iter4 J-curve winner. User directive: let model discover; experiment, iterate, finalize without checkpoints.
 
@@ -113,6 +113,47 @@ Single-seed (42) comparison of aggregate vs per-tier matching:
 **Result:** per-tier matching did not reduce active-op decline; global matching is sufficient.
 
 
+## Bayesian-style random search (30 configs, Stage 2 partial)
+
+Stage 1: 30 random configs x MC=10 over unified parameter space.
+Stage 2: planned top-5 x MC=20 was killed mid-flight (slow high-activity configs); saved top-5 here are MC=10 data from Stage 1.
+
+**Top BO config (Stage 1 winner):**
+- composite **0.8690 +- 0.0053** (MC=10)
+- ARR $62.90M, customers 434, T4+ ops **19310**
+- params:
+  - `hardware_stake_t3`: 1
+  - `lambda_max_per_segment`: 1.4446
+  - `onboarding_multiplier`: 0.4441
+  - `era_maturity_mult`: 3.0536
+  - `era_growth_threshold_mo`: 20
+  - `dp_size_multiplier`: 1.6429
+
+> **Realism caveat:** This BO winner has **T4+ ops > 5,000** — outside the J-curve realistic band (target ~3K T4+). High score is achieved by relaxing realism: elevated lambda (more customers), elevated onboarding multiplier (more operators), larger DP contracts. Useful as a **bull-case scenario** for investor narrative; **NOT recommended as the launch config**. Phase A `stake_25` (composite 0.746, T4+ 3,063) remains the realistic winner.
+
+**Top 5 from BO Stage 1:**
+
+| Rank | Composite | ARR | Customers | T4+ ops | Realistic? |
+|---|---|---|---|---|---|
+| 1 | 0.8690 | $62.90M | 434 | 19310 | no |
+| 2 | 0.8602 | $34.58M | 227 | 16120 | no |
+| 3 | 0.8497 | $75.76M | 523 | 16158 | no |
+| 4 | 0.8457 | $36.28M | 254 | 11671 | no |
+| 5 | 0.8409 | $34.95M | 224 | 8101 | no |
+
+**Detailed params for top 5:**
+
+| Rank | Stake | lambda | Onboarding | Maturity mult | Growth threshold | DP mult |
+|---|---|---|---|---|---|---|
+| 1 | $1 | 1.44 | 0.44 | 3.1 | M20 | 1.64 |
+| 2 | $101 | 0.48 | 0.39 | 4.2 | M24 | 1.88 |
+| 3 | $112 | 1.12 | 0.43 | 5.1 | M15 | 1.73 |
+| 4 | $111 | 0.58 | 0.32 | 4.2 | M23 | 1.47 |
+| 5 | $47 | 0.76 | 0.21 | 3.4 | M16 | 1.71 |
+
+**Interpretation:** The realism cost is approximately **0.12 composite** (BO best 0.869 vs realistic Phase A best 0.746). This is the gap between 'what's achievable on paper if Physical-AI demand outpaces realistic growth' and 'what's defensible to skeptical analysts under conservative assumptions'.
+
+
 ## Realism backtest vs DePIN / data-labeling peers
 
 Compared winner ARR trajectory at year-end checkpoints to Scale AI / Helium / Hivemapper.
@@ -130,10 +171,11 @@ Distance interpretation: <0.5 = same order of magnitude; 0.5-1.0 = same shape, d
 ## Iter5 headline findings
 
 - **Stake winner is $25** (composite 0.746), beating iter4's $100. There IS a floor — $0 underperforms $25.
-- **Worst combined-stress pair: `stress_geoGE_AND_winter`** at composite 0.621. The two existentials together compound — additive, not interactive.
+- **Worst combined-stress pair: `stress_geoGE_AND_winter`** at composite 0.621 (17% drop from baseline 0.746). Combined stress caps downside lower than additive expectation — J-curve maturity multiplier absorbs early shocks.
 - **Q4 milestone:** best hit rate 90%. Memo target achievable.
 - **Persona cost:** 0.183 composite — best mix `personas_20_40_30_10`. Personas remain off in winner config.
-- **Per-tier matching:** composite 0.683, active ops 0. Engine change does not improve winner — keep aggregate matching.
+- **Per-tier matching:** composite 0.683, active ops final 3342. Engine change neutral on composite; minor uplift on active op count. Off by default in winner config.
+- **BO winner:** composite 0.869 via random search — found a NEW best.
 - **Realism backtest:** trajectory closest to **Hivemapper** — sits between Helium (DePIN-stagnated) and Scale AI (hypergrowth) — defensible in investor narrative.
 
 

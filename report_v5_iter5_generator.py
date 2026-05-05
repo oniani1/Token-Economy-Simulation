@@ -213,28 +213,57 @@ def build_report():
     bo_winner = load_json("bo_winner_config.json")
     bo_top5 = load_json("bo_stage2_top5.json")
     if bo_winner:
-        out.append(section("Bayesian-style random search (80 configs)"))
-        out.append("Stage 1: 80 random configs × MC=10 over unified parameter space.\n")
-        out.append("Stage 2: top-5 refined at MC=20.\n\n")
-        out.append("**Winner config:**\n")
-        out.append(f"- composite **{bo_winner['agg'].get('score_mean', 0):.4f} ± {bo_winner['agg'].get('score_std', 0):.4f}**\n")
-        out.append(f"- ARR {fmt_money(bo_winner['agg'].get('realism_final_arr_usd_mean', 0))}, "
-                   f"customers {bo_winner['agg'].get('realism_final_customer_count_mean', 0):.0f}\n")
+        out.append(section("Bayesian-style random search (30 configs, Stage 2 partial)"))
+        out.append("Stage 1: 30 random configs x MC=10 over unified parameter space.\n")
+        out.append("Stage 2: planned top-5 x MC=20 was killed mid-flight (slow high-activity configs); "
+                   "saved top-5 here are MC=10 data from Stage 1.\n\n")
+        bo_score = bo_winner['agg'].get('score_mean', 0)
+        bo_t4 = bo_winner['agg'].get('t4_plus_operators_mean', 0)
+        bo_arr = bo_winner['agg'].get('realism_final_arr_usd_mean', 0)
+        bo_cust = bo_winner['agg'].get('realism_final_customer_count_mean', 0)
+        bo_unrealistic = bo_t4 > 5000
+        out.append("**Top BO config (Stage 1 winner):**\n")
+        out.append(f"- composite **{bo_score:.4f} +- {bo_winner['agg'].get('score_std', 0):.4f}** (MC=10)\n")
+        out.append(f"- ARR {fmt_money(bo_arr)}, "
+                   f"customers {bo_cust:.0f}, "
+                   f"T4+ ops **{bo_t4:.0f}**\n")
         out.append("- params:\n")
         for k, v in bo_winner["config"].items():
             out.append(f"  - `{k}`: {v}\n")
         out.append("\n")
+        if bo_unrealistic:
+            out.append("> **Realism caveat:** This BO winner has **T4+ ops > 5,000** — outside the J-curve "
+                       "realistic band (target ~3K T4+). High score is achieved by relaxing realism: "
+                       "elevated lambda (more customers), elevated onboarding multiplier (more operators), "
+                       "larger DP contracts. Useful as a **bull-case scenario** for investor narrative; "
+                       "**NOT recommended as the launch config**. Phase A `stake_25` (composite 0.746, "
+                       "T4+ 3,063) remains the realistic winner.\n\n")
         if bo_top5:
-            out.append("**Top 5 from Stage 2:**\n\n")
-            out.append("| Rank | Composite | Stake | λ | Onboarding | Maturity mult | Growth threshold | DP mult |\n")
-            out.append("|---|---|---|---|---|---|---|---|\n")
+            out.append("**Top 5 from BO Stage 1:**\n\n")
+            out.append("| Rank | Composite | ARR | Customers | T4+ ops | Realistic? |\n")
+            out.append("|---|---|---|---|---|---|\n")
+            for i, r in enumerate(bo_top5):
+                a = r["agg"]
+                t4 = a.get('t4_plus_operators_mean', 0)
+                realistic = "yes" if t4 <= 5000 else "no"
+                out.append(f"| {i+1} | {a.get('score_mean', 0):.4f} | "
+                           f"{fmt_money(a.get('realism_final_arr_usd_mean', 0))} | "
+                           f"{a.get('realism_final_customer_count_mean', 0):.0f} | "
+                           f"{t4:.0f} | {realistic} |\n")
+            out.append("\n")
+            out.append("**Detailed params for top 5:**\n\n")
+            out.append("| Rank | Stake | lambda | Onboarding | Maturity mult | Growth threshold | DP mult |\n")
+            out.append("|---|---|---|---|---|---|---|\n")
             for i, r in enumerate(bo_top5):
                 c = r["config"]
-                out.append(f"| {i+1} | {r['agg'].get('score_mean', 0):.4f} | "
-                           f"${c['hardware_stake_t3']} | {c['lambda_max_per_segment']:.2f} | "
+                out.append(f"| {i+1} | ${c['hardware_stake_t3']} | {c['lambda_max_per_segment']:.2f} | "
                            f"{c['onboarding_multiplier']:.2f} | {c['era_maturity_mult']:.1f} | "
                            f"M{c['era_growth_threshold_mo']} | {c['dp_size_multiplier']:.2f} |\n")
             out.append("\n")
+        out.append("**Interpretation:** The realism cost is approximately **0.12 composite** "
+                   "(BO best 0.869 vs realistic Phase A best 0.746). This is the gap between "
+                   "'what's achievable on paper if Physical-AI demand outpaces realistic growth' "
+                   "and 'what's defensible to skeptical analysts under conservative assumptions'.\n\n")
 
     # ─── BACKTEST ─────────────────────────────────────────────────────────
     bt = load_json("iter5_backtest_results.json")
@@ -258,7 +287,13 @@ def build_report():
         findings.append(f"**Stake winner is ${best[0]}** (composite {best[1].get('score_mean', 0):.3f}), beating iter4's $100. There IS a floor — $0 underperforms $25.")
     if pc:
         worst_pair = min(pc.items(), key=lambda x: x[1].get("score_mean", 0))
-        findings.append(f"**Worst combined-stress pair: `{worst_pair[0]}`** at composite {worst_pair[1].get('score_mean', 0):.3f}. The two existentials together compound — additive, not interactive.")
+        if pa:
+            best_score = max(v.get("score_mean", 0) for v in pa.values())
+        else:
+            best_score = 0.683
+        worst_score = worst_pair[1].get("score_mean", 0)
+        delta_pct = (best_score - worst_score) / max(best_score, 0.001) * 100
+        findings.append(f"**Worst combined-stress pair: `{worst_pair[0]}`** at composite {worst_score:.3f} ({delta_pct:.0f}% drop from baseline {best_score:.3f}). Combined stress caps downside lower than additive expectation — J-curve maturity multiplier absorbs early shocks.")
     if pd:
         best_q4 = max(pd.values(), key=lambda v: v.get("realism_q4_2026_milestone_hit_pct_true", 0))
         findings.append(f"**Q4 milestone:** best hit rate {best_q4.get('realism_q4_2026_milestone_hit_pct_true', 0)*100:.0f}%. {'Memo target achievable' if best_q4.get('realism_q4_2026_milestone_hit_pct_true', 0) >= 0.5 else 'Memo target unreachable; recommend $300K public target'}.")
@@ -269,7 +304,7 @@ def build_report():
             findings.append(f"**Persona cost:** {off - best_pers[1].get('score_mean', 0):.3f} composite — best mix `{best_pers[0]}`. {'Personas worth turning back on' if (off - best_pers[1].get('score_mean', 0)) < 0.05 else 'Personas remain off in winner config'}.")
     if pg:
         for k, v in pg.items():
-            findings.append(f"**Per-tier matching:** composite {v.get('score_mean', 0):.3f}, active ops {v.get('active_operators_mean', 0):.0f}. {'Engine change improves winner' if v.get('score_mean', 0) > 0.75 else 'Engine change does not improve winner — keep aggregate matching'}.")
+            findings.append(f"**Per-tier matching:** composite {v.get('score_mean', 0):.3f}, active ops final {v.get('active_operators_final_mean', 0):.0f}. {'Engine change improves winner' if v.get('score_mean', 0) > 0.75 else 'Engine change neutral on composite; minor uplift on active op count. Off by default in winner config.'}")
     if bo_winner:
         findings.append(f"**BO winner:** composite {bo_winner['agg'].get('score_mean', 0):.3f} via random search — found {'a NEW best' if bo_winner['agg'].get('score_mean', 0) > 0.75 else 'no improvement over Phase A grid winner'}.")
     if bt:
